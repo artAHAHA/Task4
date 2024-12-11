@@ -66,7 +66,7 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
     }
 
     @Override
-    public Matrix3f matrixProduct(Matrix3f other) {
+    public Matrix3f multiply(Matrix3f other) {
         double[][] result = new double[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

@@ -75,7 +75,7 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
     }
 
     @Override
-    public Matrix4f matrixProduct(Matrix4f other) {
+    public Matrix4f multiply(Matrix4f other) {
         double[][] result = new double[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -173,5 +173,40 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
             sb.append("]\n");
         }
         return sb.toString();
+    }
+
+    //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
+    public static Matrix4f scale(double sx, double sy, double sz) {
+        double[][] matrix = new double[][]{
+                {sx, 0, 0, 0},
+                {0, sy, 0, 0},
+                {0, 0, sz, 0},
+                {0, 0, 0, 1}
+        };
+        return new Matrix4f(matrix);
+    }
+
+    public static Matrix4f rotate(double angle) {
+        double rad = Math.toRadians(angle);
+        double cos = Math.cos(rad);
+        double sin = Math.sin(rad);
+
+        double[][] matrix = new double[][]{
+                {cos, -sin, 0, 0},
+                {sin, cos, 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}
+        };
+        return new Matrix4f(matrix);
+    }
+
+    public static Matrix4f translate(double tx, double ty, double tz) {
+        double[][] matrix = new double[][]{
+                {1, 0, 0, tx},
+                {0, 1, 0, ty},
+                {0, 0, 1, tz},
+                {0, 0, 0, 1}
+        };
+        return new Matrix4f(matrix);
     }
 }

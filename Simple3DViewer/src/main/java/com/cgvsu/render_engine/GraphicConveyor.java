@@ -5,17 +5,6 @@ import com.cgvsu.math.matrix.Matrix4f;
 import javax.vecmath.Point2f;
 
 public class GraphicConveyor {
-
-    public static Matrix4f rotateScaleTranslate() {
-        double[][] matrix = new double[][]{
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}
-        };
-        return new Matrix4f(matrix);
-    }
-
     public static Matrix4f lookAt(Vector3f eye, Vector3f target) {
         return lookAt(eye, target, new Vector3f(0, 1.0, 0));
     }

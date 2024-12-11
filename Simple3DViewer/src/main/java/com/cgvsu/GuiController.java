@@ -41,10 +41,6 @@ public class GuiController {
 
     private Timeline timeline;
 
-    private boolean isDragging = false;
-    private double lastMouseX, lastMouseY;
-    private final float MOUSE_SENSITIVITY = 0.01F;
-    private final float ZOOM_SENSITIVITY = 0.5F;
 
 
     @FXML
@@ -69,11 +65,6 @@ public class GuiController {
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
-        canvas.setOnMousePressed(event -> {
-            isDragging = true;
-            lastMouseX = event.getSceneX();
-            lastMouseY = event.getSceneY();
-        });
     }
 
     @FXML
