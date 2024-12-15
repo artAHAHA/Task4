@@ -1,5 +1,6 @@
 package com.cgvsu.math.matrix;
 
+import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.vectors.Vector4f;
 
 public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
@@ -38,7 +39,7 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
         double[][] result = new double[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                result[i][j] = this.elements[i][j] + other.elements[i][j];
+                result[i][j] = elements[i][j] + other.elements[i][j];
             }
         }
         return new Matrix4f(result);
@@ -56,7 +57,7 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
         double[][] result = new double[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                result[i][j] = this.elements[i][j] - other.elements[i][j];
+                result[i][j] = elements[i][j] - other.elements[i][j];
             }
         }
         return new Matrix4f(result);
@@ -79,10 +80,10 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
         double[][] result = new double[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                result[i][j] = this.elements[i][0] * other.elements[0][j] +
-                        this.elements[i][1] * other.elements[1][j] +
-                        this.elements[i][2] * other.elements[2][j] +
-                        this.elements[i][3] * other.elements[3][j];
+                result[i][j] = elements[i][0] * other.elements[0][j] +
+                        elements[i][1] * other.elements[1][j] +
+                        elements[i][2] * other.elements[2][j] +
+                        elements[i][3] * other.elements[3][j];
             }
         }
         return new Matrix4f(result);
@@ -93,7 +94,7 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
         double[][] result = new double[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                result[j][i] = this.elements[i][j];
+                result[j][i] = elements[i][j];
             }
         }
         return new Matrix4f(result);
@@ -102,10 +103,10 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
     @Override
     public double findDeterminant() {
         double determinant =
-                this.elements[0][0] * minor(0, 0) -
-                        this.elements[0][1] * minor(0, 1) +
-                        this.elements[0][2] * minor(0, 2) -
-                        this.elements[0][3] * minor(0, 3);
+                elements[0][0] * minor(0, 0) -
+                        elements[0][1] * minor(0, 1) +
+                        elements[0][2] * minor(0, 2) -
+                        elements[0][3] * minor(0, 3);
         return determinant;
     }
 
@@ -148,7 +149,7 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
             minorCol = 0;
             for (int j = 0; j < 4; j++) {
                 if (j == col) continue;
-                minorMatrix[minorRow][minorCol++] = this.elements[i][j];
+                minorMatrix[minorRow][minorCol++] = elements[i][j];
             }
             minorRow++;
         }
@@ -208,5 +209,33 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
                 {0, 0, 0, 1}
         };
         return new Matrix4f(matrix);
+    }
+
+    public static Matrix4f rotateAroundAxis(Vector3f axis, float angle) {
+        // Проверка на длину вектора
+        if (axis.getLength() < 1e-3) {
+            System.out.println("Axis vector length is too small, returning identity matrix.");
+            return Matrix4f.setIdentity(); // Возвращаем единичную матрицу
+        }
+
+        // Нормализуем ось
+        axis.normalize();
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double oneMinusCos = 1.0 - cos;
+
+        double x = axis.getX();
+        double y = axis.getY();
+        double z = axis.getZ();
+
+        // Строим матрицу вращения
+        double[][] elements = new double[][]{
+                {cos + x * x * oneMinusCos, x * y * oneMinusCos - z * sin, x * z * oneMinusCos + y * sin, 0},
+                {y * x * oneMinusCos + z * sin, cos + y * y * oneMinusCos, y * z * oneMinusCos - x * sin, 0},
+                {z * x * oneMinusCos - y * sin, z * y * oneMinusCos + x * sin, cos + z * z * oneMinusCos, 0},
+                {0, 0, 0, 1}
+        };
+
+        return new Matrix4f(elements);
     }
 }

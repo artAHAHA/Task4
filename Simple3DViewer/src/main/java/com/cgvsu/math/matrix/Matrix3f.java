@@ -36,7 +36,7 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
         double[][] result = new double[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                result[i][j] = this.elements[i][j] + other.elements[i][j];
+                result[i][j] = elements[i][j] + other.elements[i][j];
             }
         }
         return new Matrix3f(result);
@@ -47,7 +47,7 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
         double[][] result = new double[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                result[i][j] = this.elements[i][j] - other.elements[i][j];
+                result[i][j] = elements[i][j] - other.elements[i][j];
             }
         }
         return new Matrix3f(result);
@@ -70,9 +70,9 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
         double[][] result = new double[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                result[i][j] = this.elements[i][0] * other.elements[0][j] +
-                        this.elements[i][1] * other.elements[1][j] +
-                        this.elements[i][2] * other.elements[2][j];
+                result[i][j] = elements[i][0] * other.elements[0][j] +
+                        elements[i][1] * other.elements[1][j] +
+                        elements[i][2] * other.elements[2][j];
             }
         }
         return new Matrix3f(result);
@@ -83,7 +83,7 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
         double[][] result = new double[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                result[j][i] = this.elements[i][j];
+                result[j][i] = elements[i][j];
             }
         }
         return new Matrix3f(result);
@@ -92,12 +92,12 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
     @Override
     public double findDeterminant() {
         double determinant =
-                this.elements[0][0]*this.elements[1][1]*this.elements[2][2] +
-                this.elements[0][1]*this.elements[1][2]*this.elements[2][0] +
-                this.elements[1][0]*this.elements[2][1]*this.elements[0][2] -
-                this.elements[0][2]*this.elements[1][1]*this.elements[2][0] -
-                this.elements[0][1]*this.elements[1][0]*this.elements[2][2] -
-                this.elements[0][0]*this.elements[1][2]*this.elements[2][1]
+                elements[0][0]*elements[1][1]*elements[2][2] +
+                elements[0][1]*elements[1][2]*elements[2][0] +
+                elements[1][0]*elements[2][1]*elements[0][2] -
+                elements[0][2]*elements[1][1]*elements[2][0] -
+                elements[0][1]*elements[1][0]*elements[2][2] -
+                elements[0][0]*elements[1][2]*elements[2][1]
                 ;
         return determinant;
     }
@@ -145,7 +145,7 @@ public class Matrix3f implements Matrix<Matrix3f, Vector3f> {
             int minorCol = 0;
             for (int j = 0; j < 3; j++) {
                 if (j == col) continue;
-                minorMatrix[minorRow][minorCol++] = this.elements[i][j];
+                minorMatrix[minorRow][minorCol++] = elements[i][j];
             }
             minorRow++;
         }

@@ -37,74 +37,105 @@ public class Vector3f implements Vector<Vector3f> {
 
     @Override
     public Vector3f add(Vector3f other) {
-        return new Vector3f(this.x + other.x,
-                            this.y + other.y,
-                            this.z + other.z);
+        return new Vector3f(x + other.x,
+                            y + other.y,
+                            z + other.z);
+    }
+
+    @Override
+    public void add(Vector3f var1, Vector3f var2) {
+        x = var1.x + var2.x;
+        y = var1.y + var2.y;
+        z = var1.z + var2.z;
     }
 
     @Override
     public final void subtract(Vector3f var1, Vector3f var2) {
-        this.x = var1.x - var2.x;
-        this.y = var1.y - var2.y;
-        this.z = var1.z - var2.z;
+        x = var1.x - var2.x;
+        y = var1.y - var2.y;
+        z = var1.z - var2.z;
     }
+    @Override
+    public final Vector3f subtract(Vector3f var1) {
+        x = x - var1.x;
+        y = y - var1.y;
+        z = z - var1.z;
+        return this;
+    }
+
 
     @Override
     public void multiplyingVectorByScalar(double scalar) {
-        this.x = Math.round(this.x * scalar * 10.0) / 10.0;
-        this.y = Math.round(this.y * scalar * 10.0) / 10.0;
-        this.z = Math.round(this.z * scalar * 10.0) / 10.0;
+        x = x * scalar;
+        y = y * scalar;
+        z = z * scalar;
     }
 
     @Override
     public void dividingVectorByScalar(double scalar) {
-        if(scalar == 0){
+        if(Math.abs(scalar) < EPS){
             throw new ArithmeticException("На 0 делить нельзя");
         }
-        this.x = Math.round(this.x / scalar * 10.0) / 10.0;
-        this.y = Math.round(this.y / scalar * 10.0) / 10.0;
-        this.z = Math.round(this.z / scalar * 10.0) / 10.0;
+        multiplyingVectorByScalar(1/scalar);
     }
 
     @Override
     public double getLength() {
-        double length = Math.sqrt(
-                        Math.pow(this.x, 2) +
-                        Math.pow(this.y, 2) +
-                        Math.pow(this.z, 2)
+        return Math.sqrt(
+                        Math.pow(x, 2) +
+                        Math.pow(y, 2) +
+                        Math.pow(z, 2)
                         );
-        return Math.round(length * 10.0) / 10.0;
     }
 
     @Override
     public void normalize() {
         double length = getLength();
-        if (length == 0) {
+        if (Math.abs(length) < EPS) {
             throw new ArithmeticException("Длина равна 0, вектор нормализовать нельзя");
         }
-        this.x = (double) Math.round(this.x / length * 10) / 10;
-        this.y = (double) Math.round(this.y / length * 10) / 10;
-        this.z = (double) Math.round(this.z / length * 10) / 10;
+        x = x / length;
+        y = y / length;
+        z = z / length;
     }
 
     @Override
     public double scalarMultiplication(Vector3f other) {
-        return (this.x * other.x +
-                this.y * other.y +
-                this.z * other.z);
+        return (x * other.x +
+                y * other.y +
+                z * other.z);
     }
 
     public final void cross(Vector3f var1, Vector3f var2) {
         double tempX = var1.getY() * var2.getZ() - var1.getZ() * var2.getY();
         double tempY = var1.getZ() * var2.getX() - var1.getX() * var2.getZ();
-        this.z = var1.getX() * var2.getY() - var1.getY() * var2.getX();
-        this.x = tempX;
-        this.y = tempY;
+        z = var1.getX() * var2.getY() - var1.getY() * var2.getX();
+        x = tempX;
+        y = tempY;
     }
+
+    public Vector3f cross(Vector3f other) {
+        return new Vector3f(y * other.z - z * other.y,
+                z * other.x - x * other.z,
+                x * other.y - y * other.x);
+    }
+
 
 
     @Override
     public String toString() {
         return "Vector3f(" + x + ", " + y + ", " + z + ")";
+    }
+
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+    public void setZ(float z) {
+        this.z = z;
     }
 }

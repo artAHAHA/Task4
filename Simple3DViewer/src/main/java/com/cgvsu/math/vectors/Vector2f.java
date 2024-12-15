@@ -26,51 +26,61 @@ public class Vector2f implements Vector<Vector2f> {
 
     @Override
     public Vector2f add(Vector2f other) {
-        return new Vector2f(this.x + other.x,
-                            this.y + other.y);
+        return new Vector2f(x + other.x,
+                y + other.y);
+    }
+    @Override
+    public void add(Vector2f var1, Vector2f var2) {
+        x = var1.x + var2.x;
+        y = var1.y + var2.y;
     }
 
     @Override
     public final void subtract(Vector2f var1, Vector2f var2) {
-        this.x = var1.x - var2.x;
-        this.y = var1.y - var2.y;
+        x = var1.x - var2.x;
+        y = var1.y - var2.y;
+    }
+
+    @Override
+    public Vector2f subtract(Vector2f var1) {
+        x = x - var1.x;
+        y = y - var1.y;
+        return this;
     }
 
 
     @Override
     public void multiplyingVectorByScalar(double scalar) {
-        this.x = Math.round(this.x * scalar * 10.0) / 10.0;
-        this.y = Math.round(this.y * scalar * 10.0) / 10.0;
+        x = x * scalar;
+        y = y * scalar;
     }
 
     @Override
     public void dividingVectorByScalar(double scalar) {
-        if(scalar == 0){
+        if (Math.abs(scalar) < EPS) {
             throw new ArithmeticException("На 0 делить нельзя");
         }
-        this.x = Math.round(this.x / scalar * 10.0) / 10.0;
-        this.y = Math.round(this.y / scalar * 10.0) / 10.0;
+        multiplyingVectorByScalar(1 / scalar);
     }
 
     @Override
     public double getLength() {
-        double length = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-        return Math.round(length * 10.0) / 10.0;
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     @Override
     public void normalize() {
         double length = getLength();
-        if (length == 0) {
+        if (length < EPS) {
             throw new ArithmeticException("Длина равна 0, вектор нормализовать нельзя");
         }
-        this.x = (double) Math.round(this.x / length * 10) / 10;
-        this.y = (double) Math.round(this.y / length * 10) / 10;
+        x = x / length;
+        y = y / length;
     }
 
     @Override
     public double scalarMultiplication(Vector2f other) {
-        return (this.x * other.x + this.y * other.y);
+        return (x * other.x + y * other.y);
     }
 
     @Override

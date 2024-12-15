@@ -20,7 +20,7 @@ public class RenderEngine {
             final int height)
     {
         Matrix4f scaleMatrix = Matrix4f.scale(1.0, 1.0, 1.0);
-        Matrix4f rotateMatrix = Matrix4f.rotate(45.0);
+        Matrix4f rotateMatrix = Matrix4f.rotate(0);
         Matrix4f translateMatrix = Matrix4f.translate(0.0, 0.0, 0.0);
 
         Matrix4f modelMatrix = scaleMatrix
