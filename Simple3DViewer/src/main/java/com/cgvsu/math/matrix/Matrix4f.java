@@ -39,6 +39,11 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         elements[row][col] = value;
     }
 
+    /**
+     * Создает и возвращает 4x4 единичную матрицу.
+     *
+     * @return Единичная матрица 4x4.
+     */
     public static Matrix4f setIdentity() {
         // Создаем 4x4 единичную матрицу
         double[][] matrix = new double[4][4];
@@ -52,7 +57,13 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
-
+    /**
+     * Умножает матрицу на вектор и возвращает результат.
+     *
+     * @param vector Вектор, который умножается на матрицу.
+     * @return Результат умножения матрицы на вектор в виде нового вектора.
+     * @throws IllegalArgumentException Если размерность вектора не совпадает с размерностью матрицы.
+     */
     public Vector4f multiplyingMatrixByVector(Vector4f vector) {
         // Проверяем размерность вектора и матрицы на совпадение
         if (vector.getDimension() != getSize()) {
@@ -74,8 +85,14 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Vector4f(result[0], result[1], result[2], result[3]);
     }
 
-
-    //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
+    /**
+     * Создает и возвращает матрицу масштабирования.
+     *
+     * @param sx Масштаб по оси X.
+     * @param sy Масштаб по оси Y.
+     * @param sz Масштаб по оси Z.
+     * @return Матрица масштабирования 4x4.
+     */
     public static Matrix4f scale(double sx, double sy, double sz) {
         double[][] matrix = new double[][]{
                 {sx, 0, 0, 0},
@@ -86,7 +103,12 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
-    // Метод вращения вокруг осей
+    /**
+     * Создает и возвращает матрицу вращения вокруг оси X.
+     *
+     * @param angle Угол вращения в градусах.
+     * @return Матрица вращения вокруг оси X.
+     */
     public static Matrix4f rotateX(double angle) {
         double rad = Math.toRadians(angle);
         double cos = Math.cos(rad);
@@ -101,6 +123,12 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
+    /**
+     * Создает и возвращает матрицу вращения вокруг оси Y.
+     *
+     * @param angle Угол вращения в градусах.
+     * @return Матрица вращения вокруг оси Y.
+     */
     public static Matrix4f rotateY(double angle) {
         double rad = Math.toRadians(angle);
         double cos = Math.cos(rad);
@@ -115,6 +143,12 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
+    /**
+     * Создает и возвращает матрицу вращения вокруг оси Z.
+     *
+     * @param angle Угол вращения в градусах.
+     * @return Матрица вращения вокруг оси Z.
+     */
     public static Matrix4f rotateZ(double angle) {
         double rad = Math.toRadians(angle);
         double cos = Math.cos(rad);
@@ -129,7 +163,14 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
-    // Метод сдвига
+    /**
+     * Создает и возвращает матрицу сдвига.
+     *
+     * @param tx Сдвиг по оси X.
+     * @param ty Сдвиг по оси Y.
+     * @param tz Сдвиг по оси Z.
+     * @return Матрица сдвига 4x4.
+     */
     public static Matrix4f translate(double tx, double ty, double tz) {
         double[][] matrix = new double[][]{
                 {1, 0, 0, tx},
@@ -140,7 +181,14 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(matrix));
     }
 
-    // Метод вращения вокруг заданной оси
+    /**
+     * Создает и возвращает матрицу вращения вокруг заданной оси.
+     *
+     * @param axis Ось вращения (вектор).
+     * @param angle Угол вращения в радианах.
+     * @return Матрица вращения вокруг заданной оси.
+     * @throws IllegalArgumentException Если длина оси слишком мала для корректной нормализации.
+     */
     public static Matrix4f rotateAroundAxis(Vector3f axis, float angle) {
         // Проверка на длину вектора
         if (axis.getLength() < 1e-3) {
@@ -169,6 +217,12 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         return new Matrix4f(flatten(elements));
     }
 
+    /**
+     * Преобразует двумерный массив в одномерный массив.
+     *
+     * @param array Двумерный массив (матрица).
+     * @return Одномерный массив, содержащий все элементы матрицы.
+     */
     public static double[] flatten(double[][] array) {
         double[] flat = new double[16];
         int k = 0;
