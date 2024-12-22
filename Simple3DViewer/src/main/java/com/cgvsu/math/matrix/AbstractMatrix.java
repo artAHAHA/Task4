@@ -207,4 +207,16 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
         }
         return sb.toString();
     }
+
+    protected static double[] flatten(double[][] array, int size) {
+        double[] flat = new double[size * size];
+        int k = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++, k++) {
+                flat[k] = array[i][j];
+            }
+        }
+        return flat;
+    }
+
 }

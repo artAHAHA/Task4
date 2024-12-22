@@ -13,7 +13,7 @@ public class Matrix3f extends AbstractMatrix<Matrix3f> {
 
     @Override
     protected Matrix3f createInstance(double[][] elements) {
-        return new Matrix3f(flatten(elements));
+        return new Matrix3f(flatten3x3(elements));
     }
 
     @Override
@@ -36,14 +36,7 @@ public class Matrix3f extends AbstractMatrix<Matrix3f> {
         elements[row][col] = value;
     }
 
-    private double[] flatten(double[][] array) {
-        double[] flat = new double[9];
-        int k = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++, k++) {
-                flat[k] = array[i][j];
-            }
-        }
-        return flat;
+    public static double[] flatten3x3(double[][] matrix) {
+        return flatten(matrix, 3);  // Передаем размер 3 для 3x3 матрицы
     }
 }

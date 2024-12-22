@@ -24,7 +24,7 @@ public class GraphicConveyor {
                 {-resultX.dot(eye), -resultY.dot(eye), -resultZ.dot(eye), 1}
         };
 
-        return new Matrix4f(Matrix4f.flatten(matrix)).transposition();
+        return new Matrix4f(Matrix4f.flatten4x4(matrix)).transposition();
     }
 
     public static Matrix4f perspective(
@@ -40,7 +40,7 @@ public class GraphicConveyor {
         matrix[2][3] = 1.0;
         matrix[3][2] = (2 * nearPlane * farPlane) / (nearPlane - farPlane);
         matrix[3][3] = 0.0;
-        return new Matrix4f(Matrix4f.flatten(matrix));
+        return new Matrix4f(Matrix4f.flatten4x4(matrix));
     }
 
     public static Vector3f multiplyMatrix4ByVector3(final Matrix4f matrix, final Vector3f vertex) {

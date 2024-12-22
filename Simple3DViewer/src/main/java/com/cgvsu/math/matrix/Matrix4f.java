@@ -16,7 +16,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
 
     @Override
     protected Matrix4f createInstance(double[][] elements) {
-        return new Matrix4f(flatten(elements));
+        return new Matrix4f(flatten4x4(elements));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {0, 0, sz, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(flatten(matrix));
+        return new Matrix4f(flatten4x4(matrix));
     }
 
     /**
@@ -106,7 +106,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {0, -sin, cos, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(flatten(matrix));
+        return new Matrix4f(flatten4x4(matrix));
     }
 
     /**
@@ -126,7 +126,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {-sin, 0, cos, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(flatten(matrix));
+        return new Matrix4f(flatten4x4(matrix));
     }
 
     /**
@@ -146,7 +146,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {0, 0, 1, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(flatten(matrix));
+        return new Matrix4f(flatten4x4(matrix));
     }
 
     /**
@@ -164,7 +164,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {0, 0, 1, tz},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(flatten(matrix));
+        return new Matrix4f(flatten4x4(matrix));
     }
 
     /**
@@ -200,23 +200,16 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
                 {0, 0, 0, 1}
         };
 
-        return new Matrix4f(flatten(elements));
+        return new Matrix4f(flatten4x4(elements));
     }
 
     /**
      * Преобразует двумерный массив в одномерный массив.
      *
-     * @param array Двумерный массив (матрица).
+     * @param matrix (матрица).
      * @return Одномерный массив, содержащий все элементы матрицы.
      */
-    public static double[] flatten(double[][] array) {
-        double[] flat = new double[16];
-        int k = 0;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++, k++) {
-                flat[k] = array[i][j];
-            }
-        }
-        return flat;
+    public static double[] flatten4x4(double[][] matrix) {
+        return flatten(matrix, 4);
     }
 }
