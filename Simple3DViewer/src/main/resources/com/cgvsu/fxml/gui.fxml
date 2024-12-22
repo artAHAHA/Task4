@@ -7,13 +7,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.canvas.Canvas?>
 
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+
 <AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.cgvsu.GuiController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load Model">
-            <accelerator>
-                <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="F"/>
-            </accelerator>
+                <accelerator>
+                    <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="F"/>
+                </accelerator>
             </MenuItem>
         </Menu>
         <Menu mnemonicParsing="false" text="Camera Options">
@@ -49,6 +55,36 @@
             </MenuItem>
         </Menu>
     </MenuBar>
+
+
+    <VBox alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" fx:id="controlPanel">
+        <HBox spacing="5">
+            <Label text="Scale:"/>
+            <TextField fx:id="scaleX" promptText="1"/>
+            <TextField fx:id="scaleY" promptText="1"/>
+            <TextField fx:id="scaleZ" promptText="1"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="Rotate X:"/>
+            <TextField fx:id="rotateX" promptText="0"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="Rotate Y:"/>
+            <TextField fx:id="rotateY" promptText="0"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="Rotate Z:"/>
+            <TextField fx:id="rotateZ" promptText="0"/>
+        </HBox>
+        <HBox spacing="5">
+            <Label text="Translate:"/>
+            <TextField fx:id="translateX" promptText="0"/>
+            <TextField fx:id="translateY" promptText="0"/>
+            <TextField fx:id="translateZ" promptText="0"/>
+        </HBox>
+        <!-- Добавляем кнопку для применения всех трансформаций -->
+        <Button text="Apply Transformation" onAction="#handleApplyTransformation"/>
+    </VBox>
 
     <Canvas fx:id="canvas" width="1600" height="870" AnchorPane.topAnchor="30.0"/>
 </AnchorPane>

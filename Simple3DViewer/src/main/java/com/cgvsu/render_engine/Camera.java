@@ -4,7 +4,13 @@ import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.math.vectors.Vector4f;
 
+
 public class Camera {
+    private final double MIN_DISTANCE = 5;
+    private final double MIN_ANGLE = Math.toRadians(10);
+    private final double MAX_ANGLE = Math.toRadians(170);
+    private final double SMOOTH_BOUNDARY = Math.toRadians(5);
+
 
     public Camera(
             final Vector3f position,
@@ -43,7 +49,7 @@ public class Camera {
     }
 
     public void movePosition(final Vector3f translation) {
-        this.position.add(translation);
+        this.position = this.position.add(translation);
     }
 
     public void moveTarget(final Vector3f translation) {
@@ -53,6 +59,7 @@ public class Camera {
     public Matrix4f getViewMatrix() {
         return GraphicConveyor.lookAt(position, target, new Vector3f(0F, 1.0F, 0F));
     }
+
 
     Matrix4f getProjectionMatrix() {
         return GraphicConveyor.perspective(fov, aspectRatio, nearPlane, farPlane);
@@ -65,49 +72,87 @@ public class Camera {
     private float nearPlane;
     private float farPlane;
 
-        public void rotate(double deltaX, double deltaY) {
+    public void rotate(double deltaX, double deltaY) {
 
-            Vector3f direction = position.subtract(target);
+        Vector3f direction = position.subtract(target);
 
-            Vector3f up = new Vector3f(0, 1, 0);
-            Vector3f right = up.cross(direction);
-            right.normalize();
-            up.normalize();
+        Vector3f up = new Vector3f(0, 1, 0);
+        Vector3f right = up.cross(direction).getNormalized();
 
+        double angleWithUp = calculateAngle(direction, up);
+        deltaY = clampDeltaY(deltaY, angleWithUp);
 
-            // Создаем матрицы вращения вокруг осей "right" и "up"
-            Matrix4f rotationX = Matrix4f.rotateAroundAxis(right, (float) (-deltaY * 0.01));
-            Matrix4f rotationY = Matrix4f.rotateAroundAxis(up, (float) (-deltaX * 0.01));
+        direction = rotationAroundAxis(right, deltaY, direction);
+        direction = rotationAroundAxis(up, deltaX, direction);
 
+        position = target.add(direction);
+    }
 
-            // Преобразуем direction (Vector3f) в Vector4f для умножения
-            Vector4f direction4f = new Vector4f(direction.getX(), direction.getY(), direction.getZ(), 1.0);
-            direction4f = rotationX.multiplyingMatrixByVector(direction4f);
-            direction4f = rotationY.multiplyingMatrixByVector(direction4f);
-            direction = new Vector3f(direction4f.getX(), direction4f.getY(), direction4f.getZ());
+    private double calculateAngle(Vector3f vec1, Vector3f vec2) {
+        double dot = vec1.dot(vec2);
+        double lengths = vec1.getLength() * vec2.getLength();
+        return Math.acos(dot / lengths);
+    }
 
-            position = target.add(direction);
+    private double clampDeltaY(double deltaY, double angleWithUp) {
+
+        // Жестко ограничиваем deltaY
+        if (angleWithUp <= MIN_ANGLE && deltaY > 0) {
+            deltaY = 0; // Останавливаем вращение при приближении к минимальному углу
+        } else if (angleWithUp >= MAX_ANGLE && deltaY < 0) {
+            deltaY = 0; // Останавливаем вращение при приближении к максимальному углу
         }
 
 
+        // Плавное замедление вращения при приближении к пределам
+        if (angleWithUp <= MIN_ANGLE + SMOOTH_BOUNDARY && deltaY > 0) {
+            return deltaY * (angleWithUp - MIN_ANGLE) / SMOOTH_BOUNDARY;
+        }
+        if (angleWithUp >= MAX_ANGLE - SMOOTH_BOUNDARY && deltaY < 0) {
+            return deltaY * (MAX_ANGLE - angleWithUp) / SMOOTH_BOUNDARY;
+        }
+
+        return deltaY;
+    }
+
+    private Vector3f rotationAroundAxis(Vector3f axis, double delta, Vector3f vector) {
+        if (delta == 0) {
+            return vector;
+        }
+        Matrix4f rotation = Matrix4f.rotateAroundAxis(axis, (float) (-delta * 0.01));
+        return applyMatrixToVector(rotation, vector);
+    }
+
+    private Vector3f applyMatrixToVector(Matrix4f matrix, Vector3f vector) {
+        Vector4f vec4 = new Vector4f(vector.getX(), vector.getY(), vector.getZ(), 1.0);
+        vec4 = matrix.multiplyingMatrixByVector(vec4);
+        return new Vector3f(vec4.getX(), vec4.getY(), vec4.getZ());
+    }
+
     // Методы для увеличения и уменьшения зума
+    public void zoom(double scaleFactor) {
+        Vector3f direction = position.subtract(target).getNormalized();
+        direction.multiplyByScalar(-scaleFactor);
+        Vector3f newPosition = position.add(direction);
+
+        // Проверка, что камера не приблизилась слишком близко
+        double distanceToTarget = newPosition.subtract(target).getLength();
+        if (distanceToTarget >= MIN_DISTANCE) {
+            position = newPosition;  // Обновление позиции только если расстояние допустимо
+        }
+    }
     public void zoomIn() {
-        Vector3f direction = new Vector3f(position.getX(), position.getY(), position.getZ());
-        direction.subtract(position, target);
-        direction.normalize();
-        direction.multiplyingVectorByScalar(-100);
-        position = position.add(direction);
+        zoom(5);
     }
 
     public void zoomOut() {
-        Vector3f direction = new Vector3f(position.getX(), position.getY(), position.getZ());
-        direction.subtract(position, target);
-        direction.normalize();
-        direction.multiplyingVectorByScalar(100);
-        position = position.add(direction);
-
-
+        zoom(-5);
     }
 
 
+
 }
+
+
+
+

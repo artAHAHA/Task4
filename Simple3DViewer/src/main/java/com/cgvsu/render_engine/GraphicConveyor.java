@@ -1,52 +1,31 @@
 package com.cgvsu.render_engine;
 import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
-
-import javax.vecmath.Point2f;
+import com.cgvsu.math.points.Point2f;
 
 public class GraphicConveyor {
 
     public static Matrix4f lookAt(Vector3f eye, Vector3f target, Vector3f up) {
 
-        Vector3f resultZ = new Vector3f(eye.getX(), eye.getY(), eye.getZ());
-        resultZ.subtract(eye, target);
-
-        if (resultZ.getLength() < 1e-3) {
-            System.out.println("Error: Eye and target are too close, can't calculate view matrix.");
-            return Matrix4f.setIdentity();
-        }
+        Vector3f resultZ = eye.subtract(target);
 
         resultZ.normalize();
 
-
-        Vector3f resultX = new Vector3f(up.getX(), up.getY(), up.getZ());
-        resultX.cross(up, resultZ);
-
-        if (resultX.getLength() < 1e-3) {
-
-            if (Math.abs(up.getX()) < Math.abs(up.getZ())) {
-                resultX = new Vector3f(0, 0, 1);
-            } else {
-                resultX = new Vector3f(1, 0, 0);
-            }
-            System.out.println("Up and direction vectors are too parallel. Using alternative right vector.");
-        }
+        Vector3f resultX = up.cross(resultZ);
 
         resultX.normalize();
 
-        Vector3f resultY = new Vector3f(resultZ.getX(), resultZ.getY(), resultZ.getZ());
-        resultY.cross(resultZ, resultX);
+        Vector3f resultY = resultZ.cross(resultX);
 
         double[][] matrix = new double[][]{
                 {resultX.getX(), resultY.getX(), resultZ.getX(), 0},
                 {resultX.getY(), resultY.getY(), resultZ.getY(), 0},
                 {resultX.getZ(), resultY.getZ(), resultZ.getZ(), 0},
-                {-resultX.scalarMultiplication(eye), -resultY.scalarMultiplication(eye), -resultZ.scalarMultiplication(eye), 1}
+                {-resultX.dot(eye), -resultY.dot(eye), -resultZ.dot(eye), 1}
         };
 
-        return new Matrix4f(matrix).transpose();
+        return new Matrix4f(Matrix4f.flatten4x4(matrix)).transposition();
     }
-
 
     public static Matrix4f perspective(
             final double fov,
@@ -61,7 +40,7 @@ public class GraphicConveyor {
         matrix[2][3] = 1.0;
         matrix[3][2] = (2 * nearPlane * farPlane) / (nearPlane - farPlane);
         matrix[3][3] = 0.0;
-        return new Matrix4f(matrix);
+        return new Matrix4f(Matrix4f.flatten4x4(matrix));
     }
 
     public static Vector3f multiplyMatrix4ByVector3(final Matrix4f matrix, final Vector3f vertex) {
@@ -80,4 +59,7 @@ public class GraphicConveyor {
     public static Point2f vertexToPoint(final Vector3f vertex, final int width, final int height) {
         return new Point2f((float) (vertex.getX() * width + width / 2.0), (float) (-vertex.getY() * height + height / 2.0));
     }
+
 }
+
+
