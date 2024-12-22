@@ -30,7 +30,7 @@ import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
-    final private float TRANSLATION = 0.5F;
+    final private float TRANSLATION = 3F;
 
     @FXML
     private TextField scaleX, scaleY, scaleZ;
@@ -39,7 +39,7 @@ public class GuiController {
     private TextField rotateX, rotateY, rotateZ;
 
     @FXML
-    private TextField translateX,translateY, translateZ;
+    private TextField translateX, translateY, translateZ;
     @FXML
     private VBox controlPanel;
     @FXML
@@ -111,6 +111,7 @@ public class GuiController {
         prevMouseY = event.getSceneY();
         isMousePressed = true; // Устанавливаем флаг нажатия
     }
+
     @FXML
     private void onOpenModelMenuItemClick() {
         FileChooser fileChooser = new FileChooser();
@@ -180,6 +181,7 @@ public class GuiController {
     public void handleCameraForward(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
     }
+
     @FXML
     public void handleCameraBackward(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, 0, TRANSLATION));
@@ -187,12 +189,12 @@ public class GuiController {
 
     @FXML
     public void handleCameraLeft(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraRight(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
     }
 
     @FXML

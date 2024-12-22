@@ -4,6 +4,7 @@ import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.math.vectors.Vector4f;
 
+
 public class Camera {
     private final double MIN_DISTANCE = 5;
     private final double MIN_ANGLE = Math.toRadians(10);
@@ -48,7 +49,7 @@ public class Camera {
     }
 
     public void movePosition(final Vector3f translation) {
-        this.position.add(translation);
+        this.position = this.position.add(translation);
     }
 
     public void moveTarget(final Vector3f translation) {
