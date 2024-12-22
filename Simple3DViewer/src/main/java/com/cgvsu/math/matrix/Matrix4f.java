@@ -40,30 +40,13 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
     }
 
     /**
-     * Создает и возвращает 4x4 единичную матрицу.
-     *
-     * @return Единичная матрица 4x4.
-     */
-    public static Matrix4f setIdentity() {
-        // Создаем 4x4 единичную матрицу
-        double[][] matrix = new double[4][4];
-
-        // Заполняем диагональ единицами, остальные элементы - нулями
-        for (int i = 0; i < 4; i++) {
-            matrix[i][i] = 1;
-        }
-
-        // Возвращаем новый экземпляр Matrix4f с элементами матрицы
-        return new Matrix4f(flatten(matrix));
-    }
-
-    /**
      * Умножает матрицу на вектор и возвращает результат.
      *
      * @param vector Вектор, который умножается на матрицу.
      * @return Результат умножения матрицы на вектор в виде нового вектора.
      * @throws IllegalArgumentException Если размерность вектора не совпадает с размерностью матрицы.
      */
+
     public Vector4f multiplyingMatrixByVector(Vector4f vector) {
         // Проверяем размерность вектора и матрицы на совпадение
         if (vector.getDimension() != getSize()) {
@@ -84,6 +67,9 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         // Возвращаем новый вектор Vector4f с результатом
         return new Vector4f(result[0], result[1], result[2], result[3]);
     }
+
+
+    //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
 
     /**
      * Создает и возвращает матрицу масштабирования.
@@ -184,7 +170,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
     /**
      * Создает и возвращает матрицу вращения вокруг заданной оси.
      *
-     * @param axis Ось вращения (вектор).
+     * @param axis  Ось вращения (вектор).
      * @param angle Угол вращения в радианах.
      * @return Матрица вращения вокруг заданной оси.
      * @throws IllegalArgumentException Если длина оси слишком мала для корректной нормализации.
@@ -193,7 +179,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         // Проверка на длину вектора
         if (axis.getLength() < 1e-3) {
             System.out.println("Axis vector length is too small, returning identity matrix.");
-            return Matrix4f.setIdentity(); // Возвращаем единичную матрицу
+            return new Matrix4f(1); // Возвращаем единичную матрицу
         }
 
         // Нормализуем ось

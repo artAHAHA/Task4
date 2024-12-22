@@ -2,6 +2,7 @@ package com.cgvsu.math.matrix;
 
 import com.cgvsu.math.vectors.AbstractVector;
 
+
 public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
 
     protected double[][] elements;
@@ -20,7 +21,6 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
         }
         this.elements = new double[size][size];
         int k = 0;
-        // Заполняем элементы матрицы значениями из массива
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++, k++) {
                 this.elements[i][j] = array[k];
@@ -37,7 +37,6 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
     public AbstractMatrix(int one) {
         int size = this.getSize();
         this.elements = new double[size][size];
-        // Заполняем диагональ единицами
         for (int i = 0; i < size; i++) {
             this.elements[i][i] = 1;
         }
@@ -70,55 +69,17 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
     /**
      * Абстрактные методы, которые должны быть реализованы в наследниках.
      * Создает экземпляр матрицы с переданными значениями.
-     *
-     * @param elements Массив элементов для создания матрицы.
-     * @return Новый экземпляр матрицы с заданными элементами.
      */
     protected abstract T createInstance(double[] elements);
 
-    /**
-     * Абстрактный метод для создания экземпляра матрицы с двумерным массивом элементов.
-     *
-     * @param elements Двумерный массив для создания матрицы.
-     * @return Новый экземпляр матрицы с заданными элементами.
-     */
     protected abstract T createInstance(double[][] elements);
 
-    /**
-     * Абстрактный метод для создания нового экземпляра матрицы.
-     *
-     * @return Новый экземпляр матрицы.
-     */
     protected abstract T createInstance();
 
-    /**
-     * Абстрактный метод для получения размера матрицы.
-     *
-     * @return Размер матрицы.
-     */
     protected abstract int getSize();
 
-    /**
-     * Метод для обнуления матрицы (устанавливает все элементы в 0).
-     */
-    public void setZero() {
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = 0; j < getSize(); j++) {
-                elements[i][j] = 0;
-            }
-        }
-    }
 
-    /**
-     * Метод для сложения текущей матрицы с другой матрицей.
-     *
-     * @param other Матрица, которую нужно добавить.
-     * @return Результат сложения двух матриц.
-     * @throws IllegalArgumentException Если размеры матриц не совпадают.
-     */
-    public T add(T other) {
-        return addMatrix(other);
-    }
+
 
     /**
      * Реализация сложения матриц.
@@ -127,13 +88,12 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
      * @return Результат сложения матриц.
      * @throws IllegalArgumentException Если размеры матриц не совпадают.
      */
-    private T addMatrix(T other) {
+    public T add(T other) {
         if (other == null || other.getSize() != this.getSize()) {
             throw new IllegalArgumentException("Матрицы должны иметь одинаковый размер.");
         }
         double[] a = new double[this.getSize() * this.getSize()];
         int k = 0;
-        // Сложение соответствующих элементов двух матриц
         for (int i = 0; i < this.getSize(); i++) {
             for (int j = 0; j < this.getSize(); j++, k++) {
                 a[k] = this.elements[i][j] + other.getElement(i, j);
@@ -154,10 +114,9 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
             throw new IllegalArgumentException("Матрицы должны иметь одинаковый размер.");
         }
         T result = createInstance();
-        // Алгоритм умножения матриц (стандартное умножение)
         for (int i = 0; i < getSize(); i++) {
             for (int k = 0; k < getSize(); k++) {
-                double res = 0;
+                float res = 0;
                 for (int j = 0; j < getSize(); j++) {
                     res += this.elements[i][j] * other.elements[j][k];
                 }
@@ -175,24 +134,25 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
      * @throws IllegalArgumentException Если размерность вектора не совпадает с размером матрицы.
      */
     public AbstractVector multiplyingMatrixByVector(AbstractVector vector) {
-        // Проверка совместимости размерности матрицы и вектора
+        // Проверяем размерность вектора и матрицы на совпадение
         if (vector.getDimension() != getSize()) {
             throw new IllegalArgumentException("Размер вектора должен совпадать с размером матрицы.");
         }
 
-        // Создание нового массива для результата
+        // Создаем новый массив для результата
         double[] result = new double[getSize()];
 
-        // Алгоритм умножения матрицы на вектор
+        // Умножение матрицы на вектор
         for (int i = 0; i < getSize(); i++) {
             result[i] = 0;
             for (int j = 0; j < getSize(); j++) {
-                result[i] += this.elements[i][j] * vector.get(j);
+                result[i] += (float) (this.elements[i][j] * vector.get(j));  // Умножаем элементы
             }
         }
-        // Возвращаем новый вектор с результатом умножения
+        // Возвращаем новый вектор с результатом
         return vector.createInstance(result);
     }
+
 
     /**
      * Метод для транспонирования матрицы.
@@ -201,8 +161,7 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
      * @return Транспонированная матрица.
      */
     public T transposition() {
-        T result = createInstance(new double[getSize()][getSize()]);
-        // Транспонирование матрицы (перестановка строк и столбцов)
+        T result = createInstance(elements);
         for (int i = 0; i < getSize(); i++) {
             for (int j = i + 1; j < getSize(); j++) {
                 double temp = elements[i][j];
@@ -212,6 +171,7 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
         }
         return result;
     }
+
 
     /**
      * Абстрактный метод для получения элемента матрицы по индексу.
@@ -225,8 +185,8 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
     /**
      * Абстрактный метод для установки элемента матрицы по индексу.
      *
-     * @param row Индекс строки.
-     * @param col Индекс столбца.
+     * @param row   Индекс строки.
+     * @param col   Индекс столбца.
      * @param value Значение элемента.
      */
     public abstract void setElement(int row, int col, float value);
