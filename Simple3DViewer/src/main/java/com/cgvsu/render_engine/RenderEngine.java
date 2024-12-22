@@ -3,10 +3,11 @@ package com.cgvsu.render_engine;
 import java.util.ArrayList;
 import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
+import com.cgvsu.math.points.Point2f;
 import javafx.scene.canvas.GraphicsContext;
 import com.cgvsu.model.Model;
 
-import javax.vecmath.Point2f;
+
 
 import static com.cgvsu.render_engine.GraphicConveyor.*;
 
@@ -20,7 +21,7 @@ public class RenderEngine {
             final int height)
     {
         Matrix4f scaleMatrix = Matrix4f.scale(0.02,0.02,0.02);
-        Matrix4f rotateMatrix = Matrix4f.rotate(0);
+        Matrix4f rotateMatrix = Matrix4f.rotateX(0).multiply(Matrix4f.rotateY(0).multiply(Matrix4f.rotateZ(0)));
         Matrix4f translateMatrix = Matrix4f.translate(0.0, 0.0, 0.0);
 
         Matrix4f modelMatrix = scaleMatrix
@@ -49,18 +50,18 @@ public class RenderEngine {
 
             for (int vertexInPolygonInd = 1; vertexInPolygonInd < nVerticesInPolygon; ++vertexInPolygonInd) {
                 graphicsContext.strokeLine(
-                        resultPoints.get(vertexInPolygonInd - 1).x,
-                        resultPoints.get(vertexInPolygonInd - 1).y,
-                        resultPoints.get(vertexInPolygonInd).x,
-                        resultPoints.get(vertexInPolygonInd).y);
+                        resultPoints.get(vertexInPolygonInd - 1).getX(),
+                        resultPoints.get(vertexInPolygonInd - 1).getY(),
+                        resultPoints.get(vertexInPolygonInd).getX(),
+                        resultPoints.get(vertexInPolygonInd).getY());
             }
 
             if (nVerticesInPolygon > 0)
                 graphicsContext.strokeLine(
-                        resultPoints.get(nVerticesInPolygon - 1).x,
-                        resultPoints.get(nVerticesInPolygon - 1).y,
-                        resultPoints.get(0).x,
-                        resultPoints.get(0).y);
+                        resultPoints.get(nVerticesInPolygon - 1).getX(),
+                        resultPoints.get(nVerticesInPolygon - 1).getY(),
+                        resultPoints.get(0).getX(),
+                        resultPoints.get(0).getY());
         }
     }
 }

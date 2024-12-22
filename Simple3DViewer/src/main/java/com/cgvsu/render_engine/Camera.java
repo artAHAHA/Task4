@@ -76,7 +76,7 @@ public class Camera {
         Vector3f direction = position.subtract(target);
 
         Vector3f up = new Vector3f(0, 1, 0);
-        Vector3f right = up.cross(direction).getNormalize();
+        Vector3f right = up.cross(direction).getNormalized();
 
         double angleWithUp = calculateAngle(direction, up);
         deltaY = clampDeltaY(deltaY, angleWithUp);
@@ -88,7 +88,7 @@ public class Camera {
     }
 
     private double calculateAngle(Vector3f vec1, Vector3f vec2) {
-        double dot = vec1.scalarMultiplication(vec2);
+        double dot = vec1.dot(vec2);
         double lengths = vec1.getLength() * vec2.getLength();
         return Math.acos(dot / lengths);
     }
@@ -130,8 +130,8 @@ public class Camera {
 
     // Методы для увеличения и уменьшения зума
     public void zoom(double scaleFactor) {
-        Vector3f direction = position.subtract(target).getNormalize();
-        direction.multiplyingVectorByScalar(-scaleFactor);
+        Vector3f direction = position.subtract(target).getNormalized();
+        direction.multiplyByScalar(-scaleFactor);
         Vector3f newPosition = position.add(direction);
 
         // Проверка, что камера не приблизилась слишком близко

@@ -3,178 +3,77 @@ package com.cgvsu.math.matrix;
 import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.vectors.Vector4f;
 
-public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
-    private final double[][] elements;
+public class Matrix4f extends AbstractMatrix<Matrix4f> {
 
-    public Matrix4f(double[][] elements) {
-        if (elements.length != 4 || elements[0].length != 4) {
-            throw new IllegalArgumentException("Матрица должна быть 4x4");
-        }
-        this.elements = new double[4][4];
-        for (int i = 0; i < 4; i++) {
-            System.arraycopy(elements[i], 0, this.elements[i], 0, 4);
-        }
-    }
-
-    public static Matrix4f setZero() {
-        return new Matrix4f(new double[][]{
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 0, 0, 0},
-                {0, 0, 0, 0}
-        });
-    }
-
-    public static Matrix4f setIdentity() {
-        return new Matrix4f(new double[][]{
-                {1, 0, 0, 0},
-                {0, 1, 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}
-        });
+    public Matrix4f(double... array) {
+        super(array);
     }
 
     @Override
-    public Matrix4f add(Matrix4f other) {
-        double[][] result = new double[4][4];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                result[i][j] = elements[i][j] + other.elements[i][j];
-            }
-        }
-        return new Matrix4f(result);
+    protected Matrix4f createInstance(double[] elements) {
+        return new Matrix4f(elements);
     }
 
+    @Override
+    protected Matrix4f createInstance(double[][] elements) {
+        return new Matrix4f(flatten(elements));
+    }
+
+    @Override
+    protected Matrix4f createInstance() {
+        return new Matrix4f(new double[16]);
+    }
+
+    @Override
+    protected int getSize() {
+        return 4; // Матрица 4x4
+    }
+
+    @Override
     public double getElement(int row, int col) {
-        if (row < 0 || row >= 4 || col < 0 || col >= 4) {
-            throw new IndexOutOfBoundsException("Индексы должны быть в пределах 0-3");
-        }
         return elements[row][col];
     }
 
     @Override
-    public Matrix4f subtract(Matrix4f other) {
-        double[][] result = new double[4][4];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                result[i][j] = elements[i][j] - other.elements[i][j];
-            }
-        }
-        return new Matrix4f(result);
+    public void setElement(int row, int col, float value) {
+        elements[row][col] = value;
     }
 
-    @Override
-    public Vector4f multiplyingMatrixByVector(Vector4f vector) {
-        double[] result = new double[4];
+    public static Matrix4f setIdentity() {
+        // Создаем 4x4 единичную матрицу
+        double[][] matrix = new double[4][4];
+
+        // Заполняем диагональ единицами, остальные элементы - нулями
         for (int i = 0; i < 4; i++) {
-            result[i] = elements[i][0] * vector.getX() +
-                    elements[i][1] * vector.getY() +
-                    elements[i][2] * vector.getZ() +
-                    elements[i][3] * vector.getW();
+            matrix[i][i] = 1;
         }
+
+        // Возвращаем новый экземпляр Matrix4f с элементами матрицы
+        return new Matrix4f(flatten(matrix));
+    }
+
+
+    public Vector4f multiplyingMatrixByVector(Vector4f vector) {
+        // Проверяем размерность вектора и матрицы на совпадение
+        if (vector.getDimension() != getSize()) {
+            throw new IllegalArgumentException("Размер вектора должен совпадать с размером матрицы.");
+        }
+
+        // Создаем новый массив для результата
+        double[] result = new double[getSize()];
+
+        // Умножение матрицы на вектор
+        for (int i = 0; i < getSize(); i++) {
+            result[i] = 0;
+            for (int j = 0; j < getSize(); j++) {
+                result[i] += (float) (this.elements[i][j] * vector.get(j));  // Умножаем элементы
+            }
+        }
+
+        // Возвращаем новый вектор Vector4f с результатом
         return new Vector4f(result[0], result[1], result[2], result[3]);
     }
 
-    @Override
-    public Matrix4f multiply(Matrix4f other) {
-        double[][] result = new double[4][4];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                result[i][j] = elements[i][0] * other.elements[0][j] +
-                        elements[i][1] * other.elements[1][j] +
-                        elements[i][2] * other.elements[2][j] +
-                        elements[i][3] * other.elements[3][j];
-            }
-        }
-        return new Matrix4f(result);
-    }
-
-    @Override
-    public Matrix4f transpose() {
-        double[][] result = new double[4][4];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                result[j][i] = elements[i][j];
-            }
-        }
-        return new Matrix4f(result);
-    }
-
-    @Override
-    public double findDeterminant() {
-        double determinant =
-                elements[0][0] * minor(0, 0) -
-                        elements[0][1] * minor(0, 1) +
-                        elements[0][2] * minor(0, 2) -
-                        elements[0][3] * minor(0, 3);
-        return determinant;
-    }
-
-    @Override
-    public Matrix4f findInverseMatrix() {
-        double determinant = findDeterminant();
-        if (determinant == 0) {
-            throw new IllegalArgumentException("Матрица не имеет обратной матрицы (определитель равен нулю)");
-        }
-
-        double[][] adjugate = new double[4][4];
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                double sign = ((i + j) % 2 == 0) ? 1 : -1;
-                adjugate[j][i] = sign * minor(i, j);
-            }
-        }
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                adjugate[i][j] /= determinant;
-
-                if (Math.abs(adjugate[i][j]) < 1e-10) {
-                    adjugate[i][j] = 0.0;
-                }
-            }
-        }
-
-        return new Matrix4f(adjugate);
-    }
-
-
-    private double minor(int row, int col) {
-        double[][] minorMatrix = new double[3][3];
-        int minorRow = 0, minorCol;
-
-        for (int i = 0; i < 4; i++) {
-            if (i == row) continue;
-            minorCol = 0;
-            for (int j = 0; j < 4; j++) {
-                if (j == col) continue;
-                minorMatrix[minorRow][minorCol++] = elements[i][j];
-            }
-            minorRow++;
-        }
-
-        return determinantOf3x3(minorMatrix);
-    }
-
-    private double determinantOf3x3(double[][] matrix) {
-        return matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
-                matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
-                matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (double[] row : elements) {
-            sb.append("[ ");
-            for (double value : row) {
-                sb.append(value).append(" ");
-            }
-            sb.append("]\n");
-        }
-        return sb.toString();
-    }
 
     //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
     public static Matrix4f scale(double sx, double sy, double sz) {
@@ -184,23 +83,53 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
                 {0, 0, sz, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(matrix);
+        return new Matrix4f(flatten(matrix));
     }
 
-    public static Matrix4f rotate(double angle) {
+    // Метод вращения вокруг осей
+    public static Matrix4f rotateX(double angle) {
         double rad = Math.toRadians(angle);
         double cos = Math.cos(rad);
         double sin = Math.sin(rad);
 
         double[][] matrix = new double[][]{
-                {cos, -sin, 0, 0},
-                {sin, cos, 0, 0},
+                {1, 0, 0, 0},
+                {0, cos, sin, 0},
+                {0, -sin, cos, 0},
+                {0, 0, 0, 1}
+        };
+        return new Matrix4f(flatten(matrix));
+    }
+
+    public static Matrix4f rotateY(double angle) {
+        double rad = Math.toRadians(angle);
+        double cos = Math.cos(rad);
+        double sin = Math.sin(rad);
+
+        double[][] matrix = new double[][]{
+                {cos, 0, sin, 0},
+                {0, 1, 0, 0},
+                {-sin, 0, cos, 0},
+                {0, 0, 0, 1}
+        };
+        return new Matrix4f(flatten(matrix));
+    }
+
+    public static Matrix4f rotateZ(double angle) {
+        double rad = Math.toRadians(angle);
+        double cos = Math.cos(rad);
+        double sin = Math.sin(rad);
+
+        double[][] matrix = new double[][]{
+                {cos, sin, 0, 0},
+                {-sin, cos, 0, 0},
                 {0, 0, 1, 0},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(matrix);
+        return new Matrix4f(flatten(matrix));
     }
 
+    // Метод сдвига
     public static Matrix4f translate(double tx, double ty, double tz) {
         double[][] matrix = new double[][]{
                 {1, 0, 0, tx},
@@ -208,9 +137,10 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
                 {0, 0, 1, tz},
                 {0, 0, 0, 1}
         };
-        return new Matrix4f(matrix);
+        return new Matrix4f(flatten(matrix));
     }
 
+    // Метод вращения вокруг заданной оси
     public static Matrix4f rotateAroundAxis(Vector3f axis, float angle) {
         // Проверка на длину вектора
         if (axis.getLength() < 1e-3) {
@@ -236,6 +166,17 @@ public class Matrix4f implements Matrix<Matrix4f, Vector4f> {
                 {0, 0, 0, 1}
         };
 
-        return new Matrix4f(elements);
+        return new Matrix4f(flatten(elements));
+    }
+
+    public static double[] flatten(double[][] array) {
+        double[] flat = new double[16];
+        int k = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++, k++) {
+                flat[k] = array[i][j];
+            }
+        }
+        return flat;
     }
 }

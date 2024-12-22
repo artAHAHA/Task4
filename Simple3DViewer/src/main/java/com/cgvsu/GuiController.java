@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.math.vectors.Vector3f;
 import javafx.event.ActionEvent;
@@ -8,13 +9,16 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
@@ -29,11 +33,20 @@ public class GuiController {
     final private float TRANSLATION = 0.5F;
 
     @FXML
+    private TextField scaleX, scaleY, scaleZ;
+
+    @FXML
+    private TextField rotateX, rotateY, rotateZ;
+
+    @FXML
+    private TextField translateX,translateY, translateZ;
+    @FXML
+    private VBox controlPanel;
+    @FXML
     AnchorPane anchorPane;
 
     @FXML
     private Canvas canvas;
-
     private Model mesh = null;
     private Camera camera = new Camera(
             new Vector3f(0, 0, 100),
@@ -49,6 +62,21 @@ public class GuiController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        controlPanel.toFront();
+
+        scaleX.setText("1");
+        scaleY.setText("1");
+        scaleZ.setText("1");
+
+        rotateX.setText("0");
+        rotateY.setText("0");
+        rotateZ.setText("0");
+
+        translateX.setText("0");
+        translateY.setText("0");
+        translateZ.setText("0");
+
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -99,9 +127,52 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
+            mesh.saveInitialState();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleApplyTransformation(ActionEvent actionEvent) {
+        try {
+            double sx = Double.parseDouble(scaleX.getText());
+            double sy = Double.parseDouble(scaleY.getText());
+            double sz = Double.parseDouble(scaleZ.getText());
+            double angleX = Double.parseDouble(rotateX.getText());
+            double angleY = Double.parseDouble(rotateY.getText());
+            double angleZ = Double.parseDouble(rotateZ.getText());
+            double tx = Double.parseDouble(translateX.getText());
+            double ty = Double.parseDouble(translateY.getText());
+            double tz = Double.parseDouble(translateZ.getText());
+
+            // Применяем все трансформации
+            Matrix4f transformation = Matrix4f.translate(tx, ty, tz)
+                    .multiply(Matrix4f.rotateX(angleX))
+                    .multiply(Matrix4f.rotateY(angleY))
+                    .multiply(Matrix4f.rotateZ(angleZ))
+                    .multiply(Matrix4f.scale(sx, sy, sz));
+
+            applyTransformation(transformation);
+
+        } catch (NumberFormatException e) {
+            showError("Invalid input for transformations.");
+        }
+    }
+
+    // Применение трансформации
+    private void applyTransformation(Matrix4f transformation) {
+        if (mesh != null) {
+            mesh.applyTransformationRelativeToInitial(transformation);
+            canvas.requestFocus(); // Запрос фокуса для холста после изменения
+        } else {
+            showError("No model loaded.");
+        }
+    }
+
+    // Метод для отображения ошибок
+    private void showError(String message) {
+        System.err.println(message); // Здесь можно заменить на графическое отображение ошибок
     }
 
 

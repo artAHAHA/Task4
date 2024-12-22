@@ -20,7 +20,7 @@ public class Matrix4fTest {
     @Test
     void testRotateMatrix() {
         // Вращение на 90 градусов
-        Matrix4f rotateMatrix = Matrix4f.rotate(90.0);
+        Matrix4f rotateMatrix = Matrix4f.rotateX(90.0);
 
         // Проверка вращения на 90 градусов
         assertTrue(Math.abs(rotateMatrix.getElement(0, 0)) < 1e-6, "cos(90) should be approximately 0");
@@ -44,7 +44,7 @@ public class Matrix4fTest {
     public void testCombinedTransformations() {
         // Масштабирование, вращение и трансляция
         Matrix4f scaleMatrix = Matrix4f.scale(2.0, 2.0, 1.0);
-        Matrix4f rotateMatrix = Matrix4f.rotate(90.0);
+        Matrix4f rotateMatrix = Matrix4f.rotateX(90.0);
         Matrix4f translateMatrix = Matrix4f.translate(5.0, 0.0, 0.0);
 
         // Комбинированное преобразование: сначала масштабирование, затем вращение, затем трансляция
