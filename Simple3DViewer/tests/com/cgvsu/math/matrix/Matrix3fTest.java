@@ -37,6 +37,30 @@ public class Matrix3fTest {
     }
 
     @Test
+    public void testCreateIdentityMatrix3x3() {
+        Matrix3f matrix3x3 = new Matrix3f(0,0,0,0,0,0,0,0,0);
+        Matrix3f identityMatrix = matrix3x3.createIdentityMatrix(3);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i == j) {
+                    assertEquals(1.0, identityMatrix.getElement(i, j), "Диагональные элементы должны быть равны 1");
+                } else {
+                    assertEquals(0.0, identityMatrix.getElement(i, j), "Недиагональные элементы должны быть равны 0");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testSetElement() {
+        Matrix3f matrix = new Matrix3f(0,0,0,0,0,0,0,0,0);
+        matrix.setElement(0, 0, 10.0F);
+
+        assertEquals(10.0, matrix.getElement(0, 0));
+    }
+
+    @Test
     void testMatrixMultiplication() {
         double[] elements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
@@ -118,6 +142,17 @@ public class Matrix3fTest {
         assertEquals(6.0, result.get(0), 1e-7);
         assertEquals(15.0, result.get(1), 1e-7);
         assertEquals(24.0, result.get(2), 1e-7);
+    }
+
+    @Test
+    void testMatrixToString() {
+        Matrix3f matrix = new Matrix3f(1, 2, 3, 4, 5, 6, 7, 8, 9);
+
+        // Expected string representation of the matrix
+        String expected = "1,00\t2,00\t3,00\t\n4,00\t5,00\t6,00\t\n7,00\t8,00\t9,00\t\n";
+
+        // Assert that the matrix's toString() matches the expected string
+        assertEquals(expected, matrix.toString());
     }
 
 

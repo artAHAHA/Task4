@@ -18,6 +18,23 @@ class Vector4fTest {
         assertEquals(6.0f, v1.getZ());
         assertEquals(7.0f, v1.getW());
     }
+
+    @Test
+    void testSet() {
+        // Create a vector with initial components
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+
+        // Set the components using set()
+        v1.set(0, 10.0);  // Set the first component (x)
+        v1.set(1, 20.0);  // Set the second component (y)
+
+        // Verify that the components are updated correctly
+        assertEquals(10.0, v1.get(0));
+        assertEquals(20.0, v1.get(1));
+        assertEquals(3.0, v1.get(2));  // Other components should remain unchanged
+        assertEquals(4.0, v1.get(3));
+    }
+
     @Test
     void testGetXYZW() {
         Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
@@ -43,6 +60,27 @@ class Vector4fTest {
         assertEquals(3.0, components[2]);
         assertEquals(4.0, components[3]);
     }
+
+    @Test
+    void testIsEqual_SameVectors() {
+        // Create two identical vectors
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+        Vector4f v2 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+
+        // Check that they are equal
+        assertTrue(v1.isEqual(v2));
+    }
+
+    @Test
+    void testIsEqual_DifferentVectors() {
+        // Create two different vectors
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+        Vector4f v2 = new Vector4f(1.0, 2.0, 5.0, 4.0);
+
+        // Check that they are not equal
+        assertFalse(v1.isEqual(v2));
+    }
+
 
     @Test
     void testAdd() {

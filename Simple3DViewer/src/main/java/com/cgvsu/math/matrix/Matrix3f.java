@@ -6,6 +6,7 @@ public class Matrix3f extends AbstractMatrix<Matrix3f> {
         super(array);
     }
 
+
     @Override
     protected Matrix3f createInstance(double[] elements) {
         return new Matrix3f(elements);

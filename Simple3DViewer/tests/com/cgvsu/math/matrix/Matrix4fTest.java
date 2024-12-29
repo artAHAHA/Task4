@@ -9,6 +9,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Matrix4fTest {
 
+
+    @Test
+    public void testSetElement() {
+        double[] matrixElements = {
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        };
+        Matrix4f matrix = new Matrix4f(matrixElements);
+        matrix.setElement(0, 0, 10.0F);
+
+        assertEquals(10.0, matrix.getElement(0, 0));
+    }
+
     // Тест умножения матрицы на вектор
     @Test
     public void testMultiplyingMatrixByVector() {
@@ -167,4 +182,7 @@ public class Matrix4fTest {
             Matrix4f.rotateAroundAxis(axis, 90.0f);
         }, "Ожидалось исключение при передаче некорректной оси вращения.");
     }
+
+
+
 }

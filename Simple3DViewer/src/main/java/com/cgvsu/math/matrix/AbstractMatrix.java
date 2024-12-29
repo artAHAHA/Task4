@@ -29,20 +29,6 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
     }
 
     /**
-     * Конструктор для создания единичной матрицы.
-     * Создает матрицу размерности getSize() с единицами на диагонали.
-     *
-     * @param one Параметр для создания единичной матрицы (не используется в реализации).
-     */
-    public AbstractMatrix(int one) {
-        int size = this.getSize();
-        this.elements = new double[size][size];
-        for (int i = 0; i < size; i++) {
-            this.elements[i][i] = 1;
-        }
-    }
-
-    /**
      * Конструктор по умолчанию.
      * Создает матрицу с пустыми элементами (по умолчанию - 0).
      */
@@ -79,7 +65,23 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
     protected abstract int getSize();
 
 
+    /**
+     * Абстрактный метод для создания единичной матрицы заданного размера.
+     * @param size Размер матрицы.
+     * @return Единичная матрица указанного размера.
+     */
+    public T createIdentityMatrix(int size) {
+        // Создаем массив элементов для единичной матрицы
+        double[] elements = new double[size * size];
 
+        // Заполняем его единицами на диагонали и нулями в остальных местах
+        for (int i = 0; i < size; i++) {
+            elements[i * size + i] = 1.0;  // Диагональ
+        }
+
+        // Используем createInstance для создания матрицы из массива
+        return createInstance(elements);
+    }
 
     /**
      * Реализация сложения матриц.

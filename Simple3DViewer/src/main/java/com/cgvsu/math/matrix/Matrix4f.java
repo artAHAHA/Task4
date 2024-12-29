@@ -39,15 +39,6 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         elements[row][col] = value;
     }
 
-    /**
-     * Умножает матрицу на вектор и возвращает результат.
-     *
-     * @param vector Вектор, который умножается на матрицу.
-     * @return Результат умножения матрицы на вектор в виде нового вектора.
-     * @throws IllegalArgumentException Если размерность вектора не совпадает с размерностью матрицы.
-     */
-
-
     //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
 
     /**
