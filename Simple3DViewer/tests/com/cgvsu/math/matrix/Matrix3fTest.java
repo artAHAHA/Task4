@@ -8,6 +8,50 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Matrix3fTest {
 
     @Test
+    void testMatrixCreationWithArray() {
+        double[] elements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Matrix3f matrix = new Matrix3f(elements);
+        assertEquals(1.0, matrix.getElement(0, 0));
+        assertEquals(9.0, matrix.getElement(2, 2));
+    }
+
+    @Test
+    void testMatrixCreationWithVarArgs() {
+        Matrix3f matrix = new Matrix3f(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0);
+        assertEquals(1.0, matrix.getElement(0, 0));
+        assertEquals(9.0, matrix.getElement(2, 2));
+    }
+
+    @Test
+    void testMatrixAddition() {
+        double[] elements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        double[] elements2 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Matrix3f matrix1 = new Matrix3f(elements);
+        Matrix3f matrix2 = new Matrix3f(elements2);
+
+        Matrix3f result = matrix1.add(matrix2);
+
+        assertEquals(10.0, result.getElement(0, 0));
+        assertEquals(10.0, result.getElement(2, 2));
+    }
+
+    @Test
+    void testMatrixMultiplication() {
+        double[] elements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+        double[] elements2 = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+        Matrix3f matrix1 = new Matrix3f(elements);
+        Matrix3f matrix2 = new Matrix3f(elements2);
+
+        Matrix3f result = matrix1.multiply(matrix2);
+
+        assertEquals(30.0, result.getElement(0, 0));
+        assertEquals(90.0, result.getElement(2, 2));
+    }
+
+
+    @Test
     public void testMatrixCreationFromArray() {
         // Проверка правильности создания матрицы из массива
         double[] elements = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -75,5 +119,6 @@ public class Matrix3fTest {
         assertEquals(15.0, result.get(1), 1e-7);
         assertEquals(24.0, result.get(2), 1e-7);
     }
+
 
 }

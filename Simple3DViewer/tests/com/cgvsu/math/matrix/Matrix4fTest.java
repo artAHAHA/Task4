@@ -28,7 +28,7 @@ public class Matrix4fTest {
         Vector4f expected = new Vector4f(1, 2, 3, 1);
 
         // Тестируем метод умножения
-        Vector4f result = matrix.multiplyingMatrixByVector(vector);
+        Vector4f result = (Vector4f) matrix.multiplyingMatrixByVector(vector);
 
         assertTrue(expected.isEqual(result), "Vectors should be equal");
     }

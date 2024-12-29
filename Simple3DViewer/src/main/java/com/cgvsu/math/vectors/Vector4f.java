@@ -6,12 +6,15 @@ public class Vector4f extends AbstractVector<Vector4f> {
         super(components);
     }
 
+    /**
+     * Метод усекает текущий вектор, удаляя последний компонент.
+     * Этот метод создаёт новый объект {@link Vector3f}, содержащий только первые три компонента
+     * текущего вектора. Используется для преобразования вектора с размерностью больше 3
+     * в трёхмерный вектор.
+     *
+     * @return новый объект {@link Vector3f}, состоящий из первых трёх компонентов текущего вектора.
+     */
     public Vector3f truncate() {
-        if (components.length <= 1) {
-            throw new UnsupportedOperationException("Cannot truncate a vector with dimension 1 or less.");
-        }
-
-        // Убираем последний компонент и создаем новый Vector3f
         return new Vector3f(components[0], components[1], components[2]);
     }
 

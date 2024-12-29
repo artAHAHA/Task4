@@ -59,7 +59,7 @@ public class Model {
             Vector4f tempVertex = vertex.append(1); // Преобразуем в 4D вектор с w = 1.0
 
             // Применяем матрицу трансформации
-            Vector4f transformedVertex = transformation.multiplyingMatrixByVector(tempVertex);
+            Vector4f transformedVertex = (Vector4f) transformation.multiplyingMatrixByVector(tempVertex);
 
             // Преобразуем обратно в 3D вектор (игнорируем компоненту w)
             vertices.set(i, new Vector3f(

@@ -81,33 +81,22 @@ public abstract class AbstractVector<T extends AbstractVector<T>> {
      */
     public void setX(double x) {
         this.x = x;
+        this.components[0] = x; // Update the components array
     }
 
-    /**
-     * Устанавливает значение для второй компоненты вектора (y).
-     *
-     * @param y Значение компоненты y.
-     */
     public void setY(double y) {
         this.y = y;
+        this.components[1] = y; // Update the components array
     }
 
-    /**
-     * Устанавливает значение для третьей компоненты вектора (z).
-     *
-     * @param z Значение компоненты z.
-     */
     public void setZ(double z) {
         this.z = z;
+        this.components[2] = z; // Update the components array
     }
 
-    /**
-     * Устанавливает значение для четвертой компоненты вектора (w).
-     *
-     * @param w Значение компоненты w.
-     */
     public void setW(double w) {
         this.w = w;
+        this.components[3] = w; // Update the components array
     }
 
     /**

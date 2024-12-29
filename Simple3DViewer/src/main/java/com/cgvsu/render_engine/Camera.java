@@ -36,8 +36,20 @@ public class Camera {
         this.target = target;
     }
 
+    public void setFov(final float fov) {
+        this.fov = fov;
+    }
+
     public void setAspectRatio(final float aspectRatio) {
         this.aspectRatio = aspectRatio;
+    }
+
+    public void setNearPlane(final float nearPlane) {
+        this.nearPlane = nearPlane;
+    }
+
+    public void setFarPlane(final float farPlane) {
+        this.farPlane = farPlane;
     }
 
     public Vector3f getPosition() {
@@ -46,6 +58,22 @@ public class Camera {
 
     public Vector3f getTarget() {
         return target;
+    }
+
+    public float getFov() {
+        return fov;
+    }
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public float getNearPlane() {
+        return nearPlane;
+    }
+
+    public float getFarPlane() {
+        return farPlane;
     }
 
     public void movePosition(final Vector3f translation) {
@@ -59,7 +87,6 @@ public class Camera {
     public Matrix4f getViewMatrix() {
         return GraphicConveyor.lookAt(position, target, new Vector3f(0F, 1.0F, 0F));
     }
-
 
     Matrix4f getProjectionMatrix() {
         return GraphicConveyor.perspective(fov, aspectRatio, nearPlane, farPlane);
@@ -125,7 +152,7 @@ public class Camera {
 
     private Vector3f applyMatrixToVector(Matrix4f matrix, Vector3f vector) {
         Vector4f vec4 = new Vector4f(vector.getX(), vector.getY(), vector.getZ(), 1.0);
-        vec4 = matrix.multiplyingMatrixByVector(vec4);
+        vec4 = (Vector4f) matrix.multiplyingMatrixByVector(vec4);
         return new Vector3f(vec4.getX(), vec4.getY(), vec4.getZ());
     }
 
@@ -141,6 +168,7 @@ public class Camera {
             position = newPosition;  // Обновление позиции только если расстояние допустимо
         }
     }
+
     public void zoomIn() {
         zoom(5);
     }
@@ -148,8 +176,6 @@ public class Camera {
     public void zoomOut() {
         zoom(-5);
     }
-
-
 
 }
 

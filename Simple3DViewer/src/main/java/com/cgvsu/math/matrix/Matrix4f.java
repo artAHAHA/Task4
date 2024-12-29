@@ -47,27 +47,6 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
      * @throws IllegalArgumentException Если размерность вектора не совпадает с размерностью матрицы.
      */
 
-    public Vector4f multiplyingMatrixByVector(Vector4f vector) {
-        // Проверяем размерность вектора и матрицы на совпадение
-        if (vector.getDimension() != getSize()) {
-            throw new IllegalArgumentException("Размер вектора должен совпадать с размером матрицы.");
-        }
-
-        // Создаем новый массив для результата
-        double[] result = new double[getSize()];
-
-        // Умножение матрицы на вектор
-        for (int i = 0; i < getSize(); i++) {
-            result[i] = 0;
-            for (int j = 0; j < getSize(); j++) {
-                result[i] += (float) (this.elements[i][j] * vector.get(j));  // Умножаем элементы
-            }
-        }
-
-        // Возвращаем новый вектор Vector4f с результатом
-        return new Vector4f(result[0], result[1], result[2], result[3]);
-    }
-
 
     //АФФИННЫЕ ПРЕОБРАЗОВАНИЯ
 

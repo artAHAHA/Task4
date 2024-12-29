@@ -6,6 +6,45 @@ import static org.junit.jupiter.api.Assertions.*;
 class Vector4fTest {
 
     @Test
+    void testSetXYZW() {
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+        v1.setX(4.0f);
+        v1.setY(5.0f);
+        v1.setZ(6.0f);
+        v1.setW(7.0f);
+
+        assertEquals(4.0f, v1.getX());
+        assertEquals(5.0f, v1.getY());
+        assertEquals(6.0f, v1.getZ());
+        assertEquals(7.0f, v1.getW());
+    }
+    @Test
+    void testGetXYZW() {
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+
+        assertEquals(1.0, v1.getX() );
+        assertEquals(2.0, v1.getY());
+        assertEquals(3.0, v1.getZ());
+        assertEquals(4.0, v1.getW());
+    }
+
+    @Test
+    void testGetComponents() {
+
+        Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
+
+        double[] components = v1.getComponents();
+
+        assertEquals(4, components.length);
+
+
+        assertEquals(1.0, components[0]);
+        assertEquals(2.0, components[1]);
+        assertEquals(3.0, components[2]);
+        assertEquals(4.0, components[3]);
+    }
+
+    @Test
     void testAdd() {
         Vector4f v1 = new Vector4f(1.0, 2.0, 3.0, 4.0);
         Vector4f v2 = new Vector4f(5.0, 6.0, 7.0, 8.0);
