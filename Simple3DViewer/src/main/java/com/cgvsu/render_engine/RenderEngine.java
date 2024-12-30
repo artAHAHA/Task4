@@ -24,9 +24,9 @@ public class RenderEngine {
         Matrix4f rotateMatrix = Matrix4f.rotateX(0).multiply(Matrix4f.rotateY(0).multiply(Matrix4f.rotateZ(0)));
         Matrix4f translateMatrix = Matrix4f.translate(0.0, 0.0, 0.0);
 
-        Matrix4f modelMatrix = scaleMatrix
+        Matrix4f modelMatrix = translateMatrix
                 .multiply(rotateMatrix)
-                .multiply(translateMatrix);
+                .multiply(scaleMatrix);
 
 
         Matrix4f viewMatrix = camera.getViewMatrix();
