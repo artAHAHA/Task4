@@ -68,7 +68,7 @@ public class Model {
             // Преобразуем обратно в 3D вектор (игнорируем компоненту w)
             vertices.set(i, new Vector3f(
                     (float) transformedVertex.getX(),
-                    (float) transformedVertex.getY(),
+                    (float) transformedVertex.y(),
                     (float) transformedVertex.getZ()
             ));
         }

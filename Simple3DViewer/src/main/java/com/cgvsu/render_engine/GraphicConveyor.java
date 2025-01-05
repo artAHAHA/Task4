@@ -19,7 +19,7 @@ public class GraphicConveyor {
 
         double[][] matrix = new double[][]{
                 {resultX.getX(), resultY.getX(), resultZ.getX(), 0},
-                {resultX.getY(), resultY.getY(), resultZ.getY(), 0},
+                {resultX.y(), resultY.y(), resultZ.y(), 0},
                 {resultX.getZ(), resultY.getZ(), resultZ.getZ(), 0},
                 {-resultX.dot(eye), -resultY.dot(eye), -resultZ.dot(eye), 1}
         };
@@ -44,20 +44,20 @@ public class GraphicConveyor {
     }
 
     public static Vector3f multiplyMatrix4ByVector3(final Matrix4f matrix, final Vector3f vertex) {
-        double x = (matrix.getElement(0, 0) * vertex.getX()) + (matrix.getElement(0, 1) * vertex.getY()) +
+        double x = (matrix.getElement(0, 0) * vertex.getX()) + (matrix.getElement(0, 1) * vertex.y()) +
                 (matrix.getElement(0, 2) * vertex.getZ()) + matrix.getElement(0, 3);
-        double y = (matrix.getElement(1, 0) * vertex.getX()) + (matrix.getElement(1, 1) * vertex.getY()) +
+        double y = (matrix.getElement(1, 0) * vertex.getX()) + (matrix.getElement(1, 1) * vertex.y()) +
                 (matrix.getElement(1, 2) * vertex.getZ()) + matrix.getElement(1, 3);
-        double z = (matrix.getElement(2, 0) * vertex.getX()) + (matrix.getElement(2, 1) * vertex.getY()) +
+        double z = (matrix.getElement(2, 0) * vertex.getX()) + (matrix.getElement(2, 1) * vertex.y()) +
                 (matrix.getElement(2, 2) * vertex.getZ()) + matrix.getElement(2, 3);
-        double w = (matrix.getElement(3, 0) * vertex.getX()) + (matrix.getElement(3, 1) * vertex.getY()) +
+        double w = (matrix.getElement(3, 0) * vertex.getX()) + (matrix.getElement(3, 1) * vertex.y()) +
                 (matrix.getElement(3, 2) * vertex.getZ()) + matrix.getElement(3, 3);
         return new Vector3f(x / w, y / w, z / w);
     }
 
 
     public static Point2f vertexToPoint(final Vector3f vertex, final int width, final int height) {
-        return new Point2f((float) (vertex.getX() * width + width / 2.0), (float) (-vertex.getY() * height + height / 2.0));
+        return new Point2f((float) (vertex.getX() * width + width / 2.0), (float) (-vertex.y() * height + height / 2.0));
     }
 
 }

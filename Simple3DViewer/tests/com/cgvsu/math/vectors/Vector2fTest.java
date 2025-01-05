@@ -10,7 +10,7 @@ class Vector2fTest {
         Vector2f v = new Vector2f(3.0, 4.0);
         assertEquals(2, v.getDimension());
         assertEquals(3.0, v.getX(), 1e-7);
-        assertEquals(4.0, v.getY(), 1e-7);
+        assertEquals(4.0, v.y(), 1e-7);
     }
 
     @Test
@@ -26,7 +26,7 @@ class Vector2fTest {
         Vector2f v2 = new Vector2f(1.0, 2.0);
         Vector2f result = v1.add(v2);
         assertEquals(4.0, result.getX(), 1e-7);
-        assertEquals(6.0, result.getY(), 1e-7);
+        assertEquals(6.0, result.y(), 1e-7);
     }
 
     @Test
@@ -35,7 +35,7 @@ class Vector2fTest {
         Vector2f v2 = new Vector2f(1.0, 2.0);
         v1.addV(v2);
         assertEquals(4.0, v1.getX(), 1e-7);
-        assertEquals(6.0, v1.getY(), 1e-7);
+        assertEquals(6.0, v1.y(), 1e-7);
     }
 
     @Test
@@ -44,7 +44,7 @@ class Vector2fTest {
         Vector2f v2 = new Vector2f(1.0, 2.0);
         Vector2f result = v1.subtract(v2);
         assertEquals(2.0, result.getX(), 1e-7);
-        assertEquals(2.0, result.getY(), 1e-7);
+        assertEquals(2.0, result.y(), 1e-7);
     }
 
     @Test
@@ -53,7 +53,7 @@ class Vector2fTest {
         Vector2f v2 = new Vector2f(1.0, 2.0);
         v1.subtractV(v2);
         assertEquals(2.0, v1.getX(), 1e-7);
-        assertEquals(2.0, v1.getY(), 1e-7);
+        assertEquals(2.0, v1.y(), 1e-7);
     }
 
     @Test
@@ -69,7 +69,7 @@ class Vector2fTest {
         Vector2f v = new Vector2f(3.0, 4.0);
         v.multiplyByScalar(2);
         assertEquals(6.0, v.getX(), 1e-7);
-        assertEquals(8.0, v.getY(), 1e-7);
+        assertEquals(8.0, v.y(), 1e-7);
     }
 
     @Test
@@ -77,7 +77,7 @@ class Vector2fTest {
         Vector2f v = new Vector2f(6.0, 8.0);
         v.divideByScalar(2);
         assertEquals(3.0, v.getX(), 1e-7);
-        assertEquals(4.0, v.getY(), 1e-7);
+        assertEquals(4.0, v.y(), 1e-7);
     }
 
     @Test

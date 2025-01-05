@@ -81,7 +81,7 @@ public class GraphicConveyorTest {
         Vector3f expected = new Vector3f(4, 5, 6);
 
         assertEquals(expected.getX(), result.getX(), 0.001);
-        assertEquals(expected.getY(), result.getY(), 0.001);
+        assertEquals(expected.y(), result.y(), 0.001);
         assertEquals(expected.getZ(), result.getZ(), 0.001);
     }
 

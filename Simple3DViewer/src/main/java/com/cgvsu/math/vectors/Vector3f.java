@@ -5,6 +5,11 @@ public class Vector3f extends AbstractVector<Vector3f> {
     public Vector3f(double... components) {
         super(components);
     }
+
+    public static Vector3f subtraction(Vector3f v1, Vector3f v2) {
+        return new Vector3f(v1.getX() - v2.getX(), v1.y() - v2.y(), v1.getZ() - v2.getZ());
+    }
+
     /**
      * Метод добавляет новое значение в конец текущего вектора.
      * Этот метод создаёт новый объект {@link Vector4f}, содержащий все компоненты

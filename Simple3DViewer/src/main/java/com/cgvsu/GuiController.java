@@ -136,8 +136,8 @@ public class GuiController {
             exception.printStackTrace();
         }
 
-        ArrayList<Polygon> triangles = Triangle.triangulateModel(mesh.polygons);
-        mesh.setPolygons(triangles);
+        ArrayList<Polygon> triangles = Triangle.triangulateModel(mesh.polygons); //создаём список для хранения треугольных полигонов
+        mesh.setPolygons(triangles); // заменяем в модели полигоны на треугольные
     }
 
     @FXML

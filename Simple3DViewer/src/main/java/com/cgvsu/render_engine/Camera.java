@@ -151,9 +151,9 @@ public class Camera {
     }
 
     private Vector3f applyMatrixToVector(Matrix4f matrix, Vector3f vector) {
-        Vector4f vec4 = new Vector4f(vector.getX(), vector.getY(), vector.getZ(), 1.0);
+        Vector4f vec4 = new Vector4f(vector.getX(), vector.y(), vector.getZ(), 1.0);
         vec4 = (Vector4f) matrix.multiplyingMatrixByVector(vec4);
-        return new Vector3f(vec4.getX(), vec4.getY(), vec4.getZ());
+        return new Vector3f(vec4.getX(), vec4.y(), vec4.getZ());
     }
 
     // Методы для увеличения и уменьшения зума

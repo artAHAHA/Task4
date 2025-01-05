@@ -11,7 +11,7 @@ class Vector3fTest {
         Vector3f v2 = new Vector3f(4.0, 5.0, 6.0);
         Vector3f result = v1.add(v2);
         assertEquals(5.0, result.getX(), 1e-7);
-        assertEquals(7.0, result.getY(), 1e-7);
+        assertEquals(7.0, result.y(), 1e-7);
         assertEquals(9.0, result.getZ(), 1e-7);
     }
 
@@ -21,7 +21,7 @@ class Vector3fTest {
         Vector3f v2 = new Vector3f(4.0, 5.0, 6.0);
         v1.addV(v2);
         assertEquals(5.0, v1.getX(), 1e-7);
-        assertEquals(7.0, v1.getY(), 1e-7);
+        assertEquals(7.0, v1.y(), 1e-7);
         assertEquals(9.0, v1.getZ(), 1e-7);
     }
 
@@ -31,7 +31,7 @@ class Vector3fTest {
         Vector3f v2 = new Vector3f(1.0, 2.0, 3.0);
         Vector3f result = v1.subtract(v2);
         assertEquals(4.0, result.getX(), 1e-7);
-        assertEquals(2.0, result.getY(), 1e-7);
+        assertEquals(2.0, result.y(), 1e-7);
         assertEquals(0.0, result.getZ(), 1e-7);
     }
 
@@ -41,7 +41,7 @@ class Vector3fTest {
         Vector3f v2 = new Vector3f(1.0, 2.0, 3.0);
         v1.subtractV(v2);
         assertEquals(4.0, v1.getX(), 1e-7);
-        assertEquals(2.0, v1.getY(), 1e-7);
+        assertEquals(2.0, v1.y(), 1e-7);
         assertEquals(0.0, v1.getZ(), 1e-7);
     }
 
@@ -50,7 +50,7 @@ class Vector3fTest {
         Vector3f v = new Vector3f(1.0, 2.0, 3.0);
         v.multiplyByScalar(2.0);
         assertEquals(2.0, v.getX(), 1e-7);
-        assertEquals(4.0, v.getY(), 1e-7);
+        assertEquals(4.0, v.y(), 1e-7);
         assertEquals(6.0, v.getZ(), 1e-7);
     }
 
@@ -59,7 +59,7 @@ class Vector3fTest {
         Vector3f v = new Vector3f(6.0, 9.0, 12.0);
         v.divideByScalar(3.0);
         assertEquals(2.0, v.getX(), 1e-7);
-        assertEquals(3.0, v.getY(), 1e-7);
+        assertEquals(3.0, v.y(), 1e-7);
         assertEquals(4.0, v.getZ(), 1e-7);
     }
 
@@ -74,7 +74,7 @@ class Vector3fTest {
         Vector3f v = new Vector3f(3.0, 4.0, 0.0);
         v.normalize();
         assertEquals(0.6, v.getX(), 1e-7);
-        assertEquals(0.8, v.getY(), 1e-7);
+        assertEquals(0.8, v.y(), 1e-7);
         assertEquals(0.0, v.getZ(), 1e-7);
     }
 
@@ -89,7 +89,7 @@ class Vector3fTest {
         Vector3f v = new Vector3f(3.0, 4.0, 0.0);
         Vector3f result = v.getNormalized();
         assertEquals(0.6, result.getX(), 1e-7);
-        assertEquals(0.8, result.getY(), 1e-7);
+        assertEquals(0.8, result.y(), 1e-7);
         assertEquals(0.0, result.getZ(), 1e-7);
     }
 
@@ -132,7 +132,7 @@ class Vector3fTest {
         Vector3f v2 = new Vector3f(4.0, 5.0, 6.0);
         Vector3f result = v1.cross(v2);
         assertEquals(-3.0, result.getX(), 1e-7);
-        assertEquals(6.0, result.getY(), 1e-7);
+        assertEquals(6.0, result.y(), 1e-7);
         assertEquals(-3.0, result.getZ(), 1e-7);
     }
 

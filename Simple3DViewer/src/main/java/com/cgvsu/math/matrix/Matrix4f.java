@@ -1,7 +1,6 @@
 package com.cgvsu.math.matrix;
 
 import com.cgvsu.math.vectors.Vector3f;
-import com.cgvsu.math.vectors.Vector4f;
 
 public class Matrix4f extends AbstractMatrix<Matrix4f> {
 
@@ -159,7 +158,7 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
         double oneMinusCos = 1.0 - cos;
 
         double x = axis.getX();
-        double y = axis.getY();
+        double y = axis.y();
         double z = axis.getZ();
 
         // Строим матрицу вращения

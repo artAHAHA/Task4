@@ -5,10 +5,10 @@ import java.util.Arrays;
 public abstract class AbstractVector<T extends AbstractVector<T>> {
     protected final double[] components;
     public static final double EPS = 1e-7;
-    private double x;
-    private double y;
-    private double z;
-    private double w;
+    public double x;
+    public double y;
+    public double z;
+    public double w;
 
     /**
      * Конструктор для создания вектора с заданными компонентами.
@@ -52,7 +52,7 @@ public abstract class AbstractVector<T extends AbstractVector<T>> {
      *
      * @return Значение компоненты y.
      */
-    public double getY() {
+    public double y() {
         return components[1];
     }
 
