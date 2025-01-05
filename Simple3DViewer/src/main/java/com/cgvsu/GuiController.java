@@ -1,8 +1,10 @@
 package com.cgvsu;
 
 import com.cgvsu.math.matrix.Matrix4f;
+import com.cgvsu.model.Polygon;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.math.vectors.Vector3f;
+import com.cgvsu.triangle.Triangle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
@@ -47,7 +50,7 @@ public class GuiController {
 
     @FXML
     private Canvas canvas;
-    private Model mesh = null;
+    private Model mesh;
     private Camera camera = new Camera(
             new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
@@ -132,6 +135,9 @@ public class GuiController {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+
+        ArrayList<Polygon> triangles = Triangle.triangulateModel(mesh.polygons);
+        mesh.setPolygons(triangles);
     }
 
     @FXML

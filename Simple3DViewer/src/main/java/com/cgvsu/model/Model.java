@@ -21,6 +21,10 @@ public class Model {
     private ArrayList<Vector3f> initialNormals;
     private boolean isInitialStateSaved = false; // Флаг для отслеживания сохранения начального состояния
 
+    public void setPolygons(ArrayList<Polygon> polygons) {
+        this.polygons = polygons;
+    }
+
     /**
      * Сохраняет начальное состояние модели.
      */
