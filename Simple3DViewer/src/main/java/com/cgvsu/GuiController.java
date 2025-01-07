@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.calculateNormals.CalculateNormals;
 import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.render_engine.RenderEngine;
@@ -132,6 +133,7 @@ public class GuiController {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
             mesh.saveInitialState();
+            CalculateNormals.findNormals(mesh);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

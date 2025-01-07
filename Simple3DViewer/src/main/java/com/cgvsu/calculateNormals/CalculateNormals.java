@@ -7,9 +7,10 @@ import com.cgvsu.model.Polygon;
 import java.util.*;
 
 public class CalculateNormals {
-    public static ArrayList<Vector3f> findNormals(Model m) { // находим нормали для каждого полигона
+    public static void findNormals(Model m) { // находим нормали для каждого полигона
         List<Polygon> polygons = m.polygons;
         List<Vector3f> vertices = m.vertices;
+        m.normals.clear();
 
         ArrayList<Vector3f> temporaryNormals = new ArrayList<>();
         ArrayList<Vector3f> normals = new ArrayList<>();
@@ -32,7 +33,7 @@ public class CalculateNormals {
             normals.add(findVertexNormals(vertexPolygonsMap.get(i)));
         }
 
-        return normals;
+        m.normals = normals;
     }
 
     public static Vector3f findPolygonsNormals(Vector3f... vs) { // находим нормали полигона
