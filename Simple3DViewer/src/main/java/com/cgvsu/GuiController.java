@@ -18,14 +18,16 @@ import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
-import java.awt.*;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
+import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
@@ -131,6 +133,30 @@ public class GuiController {
             mesh.saveInitialState();
         } catch (IOException exception) {
             exception.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onSaveModelMenuItemClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Model");
+
+        File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
+        if (file == null) {
+            return; // Если файл не выбран, выходим из метода
+        }
+
+        if (!file.getName().toLowerCase().endsWith(".obj")) {
+            file = new File(file.getAbsolutePath() + ".obj");
+        }
+
+        ObjWriter objWriter = new ObjWriter(); // Создаем экземпляр ObjWriter
+        try {
+            objWriter.write(mesh, file.getAbsolutePath()); // Сохраняем модель
+            System.out.println("Model saved successfully to " + file.getAbsolutePath());
+        } catch (Exception e) {
+            System.out.println("Error while saving model: " + e.getMessage());
         }
     }
 
