@@ -1,43 +1,58 @@
 package com.cgvsu.math.matrix;
 
-public class Matrix3f extends AbstractMatrix<Matrix3f> {
+import com.cgvsu.math.exception.MathExceptions;
+import com.cgvsu.math.vectors.Vector;
+import com.cgvsu.math.vectors.Vector3f;
 
-    public Matrix3f(double... array) {
-        super(array);
+public class Matrix3f extends AbstractMatrix implements Matrix {
+
+    public Matrix3f(float[][] values) {
+        if (checkLengthInputValues(values)) {
+            super.value = values;
+            super.size = values.length;
+        } else {
+            throw new MathExceptions();
+        }
     }
 
-
-    @Override
-    protected Matrix3f createInstance(double[] elements) {
-        return new Matrix3f(elements);
-    }
-
-    @Override
-    protected Matrix3f createInstance(double[][] elements) {
-        return new Matrix3f(flatten3x3(elements));
-    }
-
-    @Override
-    protected Matrix3f createInstance() {
-        return new Matrix3f(new double[9]); // Матрица 3x3 (9 элементов)
+    public Matrix3f() {
     }
 
     @Override
-    protected int getSize() {
-        return 3; // Матрица 3x3
+    public void setZeroMatrix() {
+        super.size = 3;
+        super.value = new float[][]{
+                {0, 0, 0},
+                {0, 0, 0},
+                {0, 0, 0}
+        };
     }
 
     @Override
-    public double getElement(int row, int col) {
-        return elements[row][col];
+    public void setSingleMatrix() {
+        super.size = 3;
+        super.value = new float[][]{
+                {1, 0, 0},
+                {0, 1, 0},
+                {0, 0, 1}
+        };
+
     }
 
     @Override
-    public void setElement(int row, int col, float value) {
-        elements[row][col] = value;
+    protected boolean checkLengthInputValues(final float[][] values) {
+        return values.length == 3 && values[0].length == 3 && values[1].length == 3 && values[2].length == 3;
     }
 
-    public static double[] flatten3x3(double[][] matrix) {
-        return flatten(matrix, 3);  // Передаем размер 3 для 3x3 матрицы
+    @Override
+    public Vector productMatrixOnVector(final Matrix m1, final Vector v1) {
+
+        Vector vRes = new Vector3f();
+
+        float[] tmp = super.getMatrixAfterProductMatrixOnVector(m1, v1);
+
+        vRes.setValues(tmp);
+        return vRes;
     }
+
 }

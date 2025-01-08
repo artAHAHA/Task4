@@ -3,8 +3,11 @@ package com.cgvsu;
 import com.cgvsu.calculateNormals.CalculateNormals;
 import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.model.Polygon;
+import com.cgvsu.rasterization.DrawUtilsJ;
+import com.cgvsu.rasterization.MyColor;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.math.vectors.Vector3f;
+import com.cgvsu.render_engine.RenderRasterization;
 import com.cgvsu.triangle.Triangle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
@@ -34,6 +38,9 @@ import com.cgvsu.render_engine.Camera;
 
 public class GuiController {
 
+    public static boolean isLight = true;
+    private boolean isStructure = true;
+    private BufferedImage image = null;
     final private float TRANSLATION = 3F;
 
     @FXML
@@ -66,6 +73,7 @@ public class GuiController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        DrawUtilsJ graphicsUtils = new DrawUtilsJ(canvas);
 
         controlPanel.toFront();
 
@@ -93,7 +101,16 @@ public class GuiController {
             camera.setAspectRatio((float) (width / height));
 
             if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+                try {
+                    MyColor  mc = new MyColor(0.5, 0.5, 0.5);
+                    RenderRasterization.render(canvas.getGraphicsContext2D(), graphicsUtils,
+                                camera, mesh, (int) width, (int) height, image, mc);
+                    if (isStructure) {
+                        RenderEngine.render(canvas.getGraphicsContext2D(), graphicsUtils, camera, mesh, (int) width, (int) height);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -103,8 +120,8 @@ public class GuiController {
         // Обработка нажатия и отпускания кнопки мыши
         canvas.setOnMousePressed(this::onMousePressed);
         canvas.setOnMouseReleased(this::onMouseReleased);
-        canvas.setOnMouseDragged(this::onMouseDragged);
-        canvas.setOnScroll(this::onMouseScroll);
+        //canvas.setOnMouseDragged(this::onMouseDragged);
+        //canvas.setOnScroll(this::onMouseScroll);
 
         canvas.setFocusTraversable(true);
     }
@@ -132,17 +149,17 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
-            mesh.saveInitialState();
-            CalculateNormals.findNormals(mesh);
+            //mesh.saveInitialState();
+            //CalculateNormals.findNormals(mesh);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
-        ArrayList<Polygon> triangles = Triangle.triangulateModel(mesh.polygons); //создаём список для хранения треугольных полигонов
+        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(mesh.polygons); //создаём список для хранения треугольных полигонов
         mesh.setPolygons(triangles); // заменяем в модели полигоны на треугольные
     }
 
-    @FXML
+    /*@FXML
     private void handleApplyTransformation(ActionEvent actionEvent) {
         try {
             double sx = Double.parseDouble(scaleX.getText());
@@ -177,7 +194,7 @@ public class GuiController {
         } else {
             showError("No model loaded.");
         }
-    }
+    }*/
 
     // Метод для отображения ошибок
     private void showError(String message) {
@@ -221,7 +238,7 @@ public class GuiController {
     }
 
     // Событие для перетаскивания мыши (вращение камеры или перемещение камеры)
-    private void onMouseDragged(MouseEvent event) {
+    /*private void onMouseDragged(MouseEvent event) {
         if (isMousePressed) {
             double deltaX = event.getSceneX() - prevMouseX;
             double deltaY = event.getSceneY() - prevMouseY;
@@ -241,7 +258,7 @@ public class GuiController {
         } else {
             camera.zoomOut();
         }
-    }
+    }*/
 
 }
 

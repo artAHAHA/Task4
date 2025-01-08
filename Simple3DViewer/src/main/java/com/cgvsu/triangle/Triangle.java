@@ -5,48 +5,54 @@ import com.cgvsu.model.Polygon;
 import java.util.ArrayList;
 
 public class Triangle {
-    public static ArrayList<Polygon> triangulatePolygon(Polygon poly) {
-        int vertexNum = poly.getVertexIndices().size(); // получаем число точек в исходном полигоне
-        ArrayList<Polygon> polygons = new ArrayList<Polygon>(); // создаём список, в котором будут храниться треугольные полигоны
-
-        if (poly.getVertexIndices().size() == 3) { // проверяем, является ли исходный полигон треугольником
-            polygons.add(poly);
-            return polygons;
-        }
-
-        for (int i = 2; i < vertexNum - 1; i++) { // цикл для создания треугольников для основной части полигона
-            Polygon currPoly = getPolygon(poly, i);
-            polygons.add(currPoly);
-        }
-        if (vertexNum > 3) { // проверяем, нужно ли добавить ещё один треугольник
-            ArrayList<Integer> vertex = new ArrayList<>();
-            vertex.add(poly.getVertexIndices().get(0));
-            vertex.add(poly.getVertexIndices().get(vertexNum - 2));
-            vertex.add(poly.getVertexIndices().get(vertexNum - 1));
-
-            Polygon currPoly = new Polygon();
-            currPoly.setVertexIndices(vertex);
-            polygons.add(currPoly);
-        }
-        return polygons;
-    }
-
-    private static Polygon getPolygon(Polygon poly, int i) { // создаём новый полигон
-        ArrayList<Integer> vertex = new ArrayList<>(); // список для хранения индексов вершин текущего треугольника
-        vertex.add(poly.getVertexIndices().get(0));
-        vertex.add(poly.getVertexIndices().get(i - 1));
-        vertex.add(poly.getVertexIndices().get(i));
-
-        Polygon currPoly = new Polygon();
-        currPoly.setVertexIndices(vertex); // устанавливаем индексы вершин для текущего треугольника
-        return currPoly;
-    }
-
-    public static ArrayList<Polygon> triangulateModel(ArrayList<Polygon> polygons) { // метод для триангуляции всех полигонов
-        ArrayList<Polygon> newModelPoly = new ArrayList<Polygon>(); // создаём список, где будут храниться треугольные полигоны
+    public static ArrayList<Polygon> triangulatePolygon(ArrayList<Polygon> polygons) {
+        ArrayList<Polygon> triangles = new ArrayList<>();
         for (Polygon polygon : polygons) {
-            newModelPoly.addAll(triangulatePolygon(polygon)); // добавялем все полученные треугольные полигоны
+            int index = 0;
+            while (polygon.getVertexIndices().size() > 2) { //Циклическая проверка для триангуляции
+
+                Polygon triangle = new Polygon();
+
+                // Добавляем вершины в треугольник
+                triangle.getVertexIndices().add(
+                        polygon.getVertexIndices().get(index));
+                triangle.getVertexIndices().add(
+                        polygon.getVertexIndices().get(index + 1));
+                triangle.getVertexIndices().add(
+                        polygon.getVertexIndices().get(index + 2));
+
+
+                if (polygon.getTextureVertexIndices().size() != 0) {
+                    triangle.getTextureVertexIndices().add(
+                            polygon.getTextureVertexIndices().get(index));
+                    triangle.getTextureVertexIndices().add(
+                            polygon.getTextureVertexIndices().get(index + 1));
+                    triangle.getTextureVertexIndices().add(
+                            polygon.getTextureVertexIndices().get(index + 2));
+
+                    polygon.getTextureVertexIndices().remove(index + 1);
+                }
+
+                if (polygon.getNormalIndices().size() != 0) {
+                    triangle.getNormalIndices().add(
+                            polygon.getNormalIndices().get(index));
+                    triangle.getNormalIndices().add(
+                            polygon.getNormalIndices().get(index + 1));
+                    triangle.getNormalIndices().add(
+                            polygon.getNormalIndices().get(index + 2));
+
+                    polygon.getNormalIndices().remove(index + 1);
+                }
+
+
+                polygon.getVertexIndices().remove(index + 1);
+                triangles.add(triangle);
+            }
+
+            if (polygon.getVertexIndices().size() < 3) { //Убираем из массива точки, которые уже построились
+                polygon.getVertexIndices().clear();
+            }
         }
-        return newModelPoly;
+        return triangles;
     }
 }

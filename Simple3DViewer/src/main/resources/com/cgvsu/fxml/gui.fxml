@@ -83,7 +83,7 @@
             <TextField fx:id="translateZ" promptText="0"/>
         </HBox>
         <!-- Добавляем кнопку для применения всех трансформаций -->
-        <Button text="Apply Transformation" onAction="#handleApplyTransformation"/>
+        <!-- <Button text="Apply Transformation" onAction="#handleApplyTransformation"/> -->
     </VBox>
 
     <Canvas fx:id="canvas" width="1600" height="870" AnchorPane.topAnchor="30.0"/>

@@ -1,25 +1,41 @@
 package com.cgvsu.math.vectors;
 
-public class Vector4f extends AbstractVector<Vector4f> {
+import com.cgvsu.math.exception.MathExceptions;
 
-    public Vector4f(double... components) {
-        super(components);
+public class Vector4f extends AbstractVector implements Vector {
+
+    public Vector4f() {
     }
 
-    /**
-     * Метод усекает текущий вектор, удаляя последний компонент.
-     * Этот метод создаёт новый объект {@link Vector3f}, содержащий только первые три компонента
-     * текущего вектора. Используется для преобразования вектора с размерностью больше 3
-     * в трёхмерный вектор.
-     *
-     * @return новый объект {@link Vector3f}, состоящий из первых трёх компонентов текущего вектора.
-     */
-    public Vector3f truncate() {
-        return new Vector3f(components[0], components[1], components[2]);
+    public Vector4f(float[] values) {
+        if (checkLengthInputValues(values)) {
+            super.values = values;
+            super.size = values.length;
+        } else throw new MathExceptions();
+    }
+
+    public Vector4f(float v1, float v2, float v3, float v4) {
+        super.values = new float[4];
+
+        super.size = 4;
+
+        super.values[0] = v1;
+        super.values[1] = v2;
+        super.values[2] = v3;
+        super.values[3] = v4;
     }
 
     @Override
-    public Vector4f createInstance(double... components) {
-        return new Vector4f(components);
+    public void vectorCrossProduct(Vector v2) {
+    }
+
+    @Override
+    public Vector vectorCrossProduct(Vector v1, Vector v2) {
+        return null;
+    }
+
+    @Override
+    protected boolean checkLengthInputValues(float[] values) {
+        return values.length == 4;
     }
 }

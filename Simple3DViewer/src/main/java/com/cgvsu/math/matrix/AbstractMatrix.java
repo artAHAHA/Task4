@@ -1,224 +1,143 @@
 package com.cgvsu.math.matrix;
 
+import com.cgvsu.math.exception.MathExceptions;
 import com.cgvsu.math.vectors.AbstractVector;
+import com.cgvsu.math.vectors.Vector;
 
 
-public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
+public abstract class AbstractMatrix implements Matrix {
+    float[][] value;
+    int size = 0;
 
-    protected double[][] elements;
-
-    /**
-     * Конструктор, принимающий одномерный массив элементов.
-     * Преобразует массив в матрицу.
-     *
-     * @param array Массив элементов для инициализации матрицы.
-     * @throws IllegalArgumentException Если количество элементов не соответствует размеру матрицы.
-     */
-    public AbstractMatrix(double... array) {
-        int size = this.getSize();
-        if (array.length != size * size) {
-            throw new IllegalArgumentException("Массив должен содержать ровно " + (size * size) + " элементов.");
-        }
-        this.elements = new double[size][size];
-        int k = 0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++, k++) {
-                this.elements[i][j] = array[k];
-            }
-        }
-    }
-
-    /**
-     * Конструктор по умолчанию.
-     * Создает матрицу с пустыми элементами (по умолчанию - 0).
-     */
-    public AbstractMatrix() {
-        int size = this.getSize();
-        this.elements = new double[size][size];
-    }
-
-    /**
-     * Конструктор, принимающий двумерный массив.
-     * Проверяет, что размеры массива соответствуют размеру матрицы.
-     *
-     * @param array Двумерный массив для инициализации матрицы.
-     * @throws IllegalArgumentException Если размеры массива не соответствуют размеру матрицы.
-     */
-    public AbstractMatrix(double[][] array) {
-        int size = this.getSize();
-        if (array.length != size || array[0].length != size) {
-            throw new IllegalArgumentException("Массив должен содержать ровно " + (size * size) + " элементов.");
-        }
-        this.elements = array;
-    }
-
-    /**
-     * Абстрактные методы, которые должны быть реализованы в наследниках.
-     * Создает экземпляр матрицы с переданными значениями.
-     */
-    protected abstract T createInstance(double[] elements);
-
-    protected abstract T createInstance(double[][] elements);
-
-    protected abstract T createInstance();
-
-    protected abstract int getSize();
-
-
-    /**
-     * Абстрактный метод для создания единичной матрицы заданного размера.
-     * @param size Размер матрицы.
-     * @return Единичная матрица указанного размера.
-     */
-    public T createIdentityMatrix(int size) {
-        // Создаем массив элементов для единичной матрицы
-        double[] elements = new double[size * size];
-
-        // Заполняем его единицами на диагонали и нулями в остальных местах
-        for (int i = 0; i < size; i++) {
-            elements[i * size + i] = 1.0;  // Диагональ
-        }
-
-        // Используем createInstance для создания матрицы из массива
-        return createInstance(elements);
-    }
-
-    /**
-     * Реализация сложения матриц.
-     *
-     * @param other Матрица для сложения.
-     * @return Результат сложения матриц.
-     * @throws IllegalArgumentException Если размеры матриц не совпадают.
-     */
-    public T add(T other) {
-        if (other == null || other.getSize() != this.getSize()) {
-            throw new IllegalArgumentException("Матрицы должны иметь одинаковый размер.");
-        }
-        double[] a = new double[this.getSize() * this.getSize()];
-        int k = 0;
-        for (int i = 0; i < this.getSize(); i++) {
-            for (int j = 0; j < this.getSize(); j++, k++) {
-                a[k] = this.elements[i][j] + other.getElement(i, j);
-            }
-        }
-        return createInstance(a);
-    }
-
-    /**
-     * Метод для умножения матрицы на другую матрицу.
-     *
-     * @param other Матрица для умножения.
-     * @return Результат умножения двух матриц.
-     * @throws IllegalArgumentException Если размеры матриц не совпадают.
-     */
-    public T multiply(T other) {
-        if (other == null || other.getSize() != this.getSize()) {
-            throw new IllegalArgumentException("Матрицы должны иметь одинаковый размер.");
-        }
-        T result = createInstance();
-        for (int i = 0; i < getSize(); i++) {
-            for (int k = 0; k < getSize(); k++) {
-                float res = 0;
-                for (int j = 0; j < getSize(); j++) {
-                    res += this.elements[i][j] * other.elements[j][k];
-                }
-                result.elements[i][k] = res;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Метод для умножения матрицы на вектор.
-     *
-     * @param vector Вектор, на который нужно умножить матрицу.
-     * @return Результат умножения матрицы на вектор.
-     * @throws IllegalArgumentException Если размерность вектора не совпадает с размером матрицы.
-     */
-    public AbstractVector multiplyingMatrixByVector(AbstractVector vector) {
-        // Проверяем размерность вектора и матрицы на совпадение
-        if (vector.getDimension() != getSize()) {
-            throw new IllegalArgumentException("Размер вектора должен совпадать с размером матрицы.");
-        }
-
-        // Создаем новый массив для результата
-        double[] result = new double[getSize()];
-
-        // Умножение матрицы на вектор
-        for (int i = 0; i < getSize(); i++) {
-            result[i] = 0;
-            for (int j = 0; j < getSize(); j++) {
-                result[i] += (float) (this.elements[i][j] * vector.get(j));  // Умножаем элементы
-            }
-        }
-        // Возвращаем новый вектор с результатом
-        return vector.createInstance(result);
-    }
-
-
-    /**
-     * Метод для транспонирования матрицы.
-     * Транспонирует матрицу, меняя местами строки и столбцы.
-     *
-     * @return Транспонированная матрица.
-     */
-    public T transposition() {
-        T result = createInstance(elements);
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = i + 1; j < getSize(); j++) {
-                double temp = elements[i][j];
-                result.elements[i][j] = elements[j][i];
-                result.elements[j][i] = temp;
-            }
-        }
-        return result;
-    }
-
-
-    /**
-     * Абстрактный метод для получения элемента матрицы по индексу.
-     *
-     * @param row Индекс строки.
-     * @param col Индекс столбца.
-     * @return Значение элемента матрицы.
-     */
-    public abstract double getElement(int row, int col);
-
-    /**
-     * Абстрактный метод для установки элемента матрицы по индексу.
-     *
-     * @param row   Индекс строки.
-     * @param col   Индекс столбца.
-     * @param value Значение элемента.
-     */
-    public abstract void setElement(int row, int col, float value);
-
-    /**
-     * Возвращает строковое представление матрицы.
-     *
-     * @return Строка, представляющая матрицу.
-     */
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < getSize(); i++) {
-            for (int j = 0; j < getSize(); j++) {
-                sb.append(String.format("%.2f\t", elements[i][j]));
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
+    public abstract void setZeroMatrix();
+
+    @Override
+    public abstract void setSingleMatrix();
+
+    protected abstract boolean checkLengthInputValues(float[][] values);
+
+    @Override
+    public int getSize() {
+        return size;
     }
 
-    protected static double[] flatten(double[][] array, int size) {
-        double[] flat = new double[size * size];
-        int k = 0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++, k++) {
-                flat[k] = array[i][j];
-            }
-        }
-        return flat;
+    @Override
+    public float[][] getValues() {
+        return this.value;
     }
 
+    @Override
+    public void setValue(float[][] value) {
+
+        if (checkLengthInputValues(value)) {
+            this.value = value;
+            this.size = value.length;
+        } else throw new MathExceptions();
+    }
+
+    @Override
+    public Matrix sumMatrix(final Matrix m1, final Matrix m2) {
+
+        float[][] tmp = new float[m1.getSize()][m1.getSize()];
+
+        if (m1.getSize() != m2.getSize())
+            throw new MathExceptions();
+
+        for (int i = 0; i < m1.getSize(); i++) {
+            for (int j = 0; j < m1.getSize(); j++) {
+                tmp[i][j] = m1.getValues()[i][j] + m2.getValues()[i][j];
+            }
+        }
+
+        this.value = tmp;
+        return this;
+    }
+
+    @Override
+    public Matrix minusMatrix(final Matrix m1, final Matrix m2) {
+
+        float[][] tmp = new float[m1.getSize()][m1.getSize()];
+
+        if (m1.getSize() == m2.getSize()) {
+            for (int i = 0; i < m1.getSize(); i++) {
+                for (int j = 0; j < m1.getSize(); j++) {
+                    tmp[i][j] = m1.getValues()[i][j] - m2.getValues()[i][j];
+                }
+            }
+        } else throw new MathExceptions();
+
+        this.value = tmp;
+        return this;
+    }
+
+    @Override
+    public abstract Vector productMatrixOnVector(final Matrix m1, final Vector v1);
+
+    protected float[] getMatrixAfterProductMatrixOnVector(final Matrix m1, final Vector v1) {
+
+        float[] tmp = new float[m1.getSize()];
+
+        if (m1.getSize() == v1.getSize()) {
+            for (int i = 0; i < m1.getSize(); i++) {
+                for (int j = 0; j < m1.getSize(); j++) {
+                    tmp[i] = tmp[i] + m1.getValues()[i][j] * v1.getValues()[j];
+                }
+            }
+        } else throw new MathExceptions();
+
+        return tmp;
+
+    }
+
+    @Override
+    public void productOnMatrix(final Matrix m1){
+        float[][] tmp = new float[this.getSize()][this.getSize()];
+        if (m1.getSize() == this.getSize()) {
+            for (int i = 0; i < m1.getSize(); i++) {
+                for (int j = 0; j < m1.getSize(); j++) {
+                    for (int k = 0; k < m1.getSize(); k++) {
+                        tmp[i][j] += this.getValues()[i][k] * m1.getValues()[k][j];
+                    }
+                }
+            }
+        } else throw new MathExceptions();
+
+        this.value = tmp;
+        this.size = tmp.length;
+    }
+
+
+    @Override
+    public Matrix productTwoMatrix(final Matrix m1, final Matrix m2) {
+
+        float[][] tmp = new float[m1.getSize()][m1.getSize()];
+
+        if (m1.getSize() == m2.getSize()) {
+            for (int i = 0; i < m1.getSize(); i++) {
+                for (int j = 0; j < m1.getSize(); j++) {
+                    for (int k = 0; k < m1.getSize(); k++) {
+                        tmp[i][j] += m1.getValues()[i][k] * m2.getValues()[k][j];
+                    }
+                }
+            }
+        } else throw new MathExceptions();
+
+        this.value = tmp;
+        return this;
+    }
+
+    @Override
+    public Matrix transpose(final Matrix m) {
+        float[][] tmp = new float[m.getSize()][m.getSize()];
+
+        for (int i = 0; i < m.getSize(); i++) {
+            for (int j = 0; j < m.getSize(); j++) {
+                tmp[j][i] = m.getValues()[i][j];
+            }
+        }
+
+        this.value = tmp;
+        return this;
+    }
 }

@@ -1,5 +1,7 @@
 package com.cgvsu.render_engine;
 
+import com.cgvsu.math.affineTransform.AffineTransform;
+import com.cgvsu.math.matrix.Matrix3f;
 import com.cgvsu.math.vectors.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
 import com.cgvsu.math.vectors.Vector4f;
@@ -10,6 +12,13 @@ public class Camera {
     private final double MIN_ANGLE = Math.toRadians(10);
     private final double MAX_ANGLE = Math.toRadians(170);
     private final double SMOOTH_BOUNDARY = Math.toRadians(5);
+    private Vector3f position;
+    private Vector3f target;
+    private float fov;
+    private float aspectRatio;
+    private float nearPlane;
+    private float farPlane;
+    private final AffineTransform affineTransform = new AffineTransform();
 
 
     public Camera(
@@ -27,7 +36,6 @@ public class Camera {
         this.farPlane = farPlane;
     }
 
-
     public void setPosition(final Vector3f position) {
         this.position = position;
     }
@@ -36,20 +44,8 @@ public class Camera {
         this.target = target;
     }
 
-    public void setFov(final float fov) {
-        this.fov = fov;
-    }
-
     public void setAspectRatio(final float aspectRatio) {
         this.aspectRatio = aspectRatio;
-    }
-
-    public void setNearPlane(final float nearPlane) {
-        this.nearPlane = nearPlane;
-    }
-
-    public void setFarPlane(final float farPlane) {
-        this.farPlane = farPlane;
     }
 
     public Vector3f getPosition() {
@@ -60,121 +56,120 @@ public class Camera {
         return target;
     }
 
-    public float getFov() {
-        return fov;
-    }
-
-    public float getAspectRatio() {
-        return aspectRatio;
-    }
-
-    public float getNearPlane() {
-        return nearPlane;
-    }
-
-    public float getFarPlane() {
-        return farPlane;
-    }
-
     public void movePosition(final Vector3f translation) {
-        this.position = this.position.add(translation);
+        this.position.sumVectors(translation);
+    }
+
+    public void scalePosition(final Vector3f scale){
+        this.position = affineTransform.scale(this.position, scale.getX(), scale.getY(), scale.getZ());
+    }
+
+    public void rotationPositionAroundX(final int angle){
+        this.position = affineTransform.rotationAroundX(angle,this.position);
+    }
+    public void rotationPositionAroundY(final int angle){
+        this.position = affineTransform.rotationAroundY(angle,this.position);
     }
 
     public void moveTarget(final Vector3f translation) {
-        this.target = this.target.add(translation);
+        this.target.sumVectors(translation);;
     }
 
-    public Matrix4f getViewMatrix() {
-        return GraphicConveyor.lookAt(position, target, new Vector3f(0F, 1.0F, 0F));
+
+    Vector3f resultY = new Vector3f(new float[]{0,1.0f,0});
+    public Vector3f vectorY(){
+        Vector3f resultX = new Vector3f();
+        Vector3f resultZ = new Vector3f();
+
+        resultZ.minusTwoVectors(target, position);
+        resultX.vectorCrossProduct(resultY, resultZ);
+        resultY.vectorCrossProduct(resultZ, resultX);
+
+        resultX.vectorNormalization();
+        resultY.vectorNormalization();
+        resultZ.vectorNormalization();
+
+        return resultY;
+    }
+    public Vector3f vectorZ(){
+        Vector3f resultX = new Vector3f();
+        Vector3f resultZ = new Vector3f();
+
+        resultZ.minusTwoVectors(target, position);
+        resultX.vectorCrossProduct(resultY, resultZ);
+        resultY.vectorCrossProduct(resultZ, resultX);
+
+        return resultZ;
+    }
+    public Vector3f vectorX(){
+        Vector3f resultX = new Vector3f();
+        Vector3f resultZ = new Vector3f();
+
+        resultZ.minusTwoVectors(target, position);
+        resultX.vectorCrossProduct(resultY, resultZ);
+        resultY.vectorCrossProduct(resultZ, resultX);
+
+        resultX.vectorNormalization();
+        resultY.vectorNormalization();
+        resultZ.vectorNormalization();
+
+        return resultX;
+    }
+
+    public void rotationAroundChangedX(double angle){
+        Vector3f resultX = vectorX();
+        rotationAroundVector(angle, resultX);
+    }
+
+    public void rotationAroundChangedY(double angle){
+
+        resultY = vectorY();
+        rotationAroundVector(angle, resultY);
+    }
+
+    private void rotationAroundVector(double angle, Vector3f result) {
+        float cos = (float) Math.cos(angle);
+        float sin = (float) Math.sin(angle);
+        result.vectorNormalization();
+        float x = result.getX();
+        float y = result.getY();
+        float z = result.getZ();
+        Matrix3f mRotationAroundAxes = new Matrix3f(
+                new float[][]{
+                        {cos + (1-cos) * x*x, (1-cos)*x*y - sin*z, (1-cos)*x*z + sin *y},
+                        {(1-cos)*y*x + sin*z, cos+(1-cos) * y*y, (1-cos) * y*z - sin*x},
+                        {(1-cos)*z*x - sin*y, (1-cos)*z*y + sin*x, cos+(1-cos) * z * z}
+                }
+        );
+
+        this.position = (Vector3f) mRotationAroundAxes.productMatrixOnVector(mRotationAroundAxes, this.position);
+    }
+
+
+    public void rotationAroundAxes(double angleX, double angleY, double angleZ){
+        float sinX = (float) Math.sin(angleX);
+        float sinY = (float) Math.sin(angleY);
+        float sinZ = (float) Math.sin(angleZ);
+        float cosX = (float) Math.cos(angleX);
+        float cosY = (float) Math.cos(angleY);
+        float cosZ = (float) Math.cos(angleZ);
+        Matrix3f mRotationAroundAxes = new Matrix3f(
+                new float[][]{
+                        {cosY * cosZ, sinY * sinX - cosY * sinZ * cosX, cosY * sinZ * sinX + sinY * cosX},
+                        {sinZ, cosY * cosX, -cosZ * sinX},
+                        {-sinY * cosZ, sinX * sinZ * cosX + cosY * sinX, cosY * cosX - sinY * sinZ * sinX}
+                }
+        );
+        this.position = (Vector3f) mRotationAroundAxes.productMatrixOnVector(mRotationAroundAxes, this.position);
+
+    }
+
+    Matrix4f getViewMatrix() {
+        return GraphicConveyor.lookAt(position, target);
     }
 
     Matrix4f getProjectionMatrix() {
         return GraphicConveyor.perspective(fov, aspectRatio, nearPlane, farPlane);
-    }
-
-    private Vector3f position;
-    private Vector3f target;
-    private float fov;
-    private float aspectRatio;
-    private float nearPlane;
-    private float farPlane;
-
-    public void rotate(double deltaX, double deltaY) {
-
-        Vector3f direction = position.subtract(target);
-
-        Vector3f up = new Vector3f(0, 1, 0);
-        Vector3f right = up.cross(direction).getNormalized();
-
-        double angleWithUp = calculateAngle(direction, up);
-        deltaY = clampDeltaY(deltaY, angleWithUp);
-
-        direction = rotationAroundAxis(right, deltaY, direction);
-        direction = rotationAroundAxis(up, deltaX, direction);
-
-        position = target.add(direction);
-    }
-
-    private double calculateAngle(Vector3f vec1, Vector3f vec2) {
-        double dot = vec1.dot(vec2);
-        double lengths = vec1.getLength() * vec2.getLength();
-        return Math.acos(dot / lengths);
-    }
-
-    private double clampDeltaY(double deltaY, double angleWithUp) {
-
-        // Жестко ограничиваем deltaY
-        if (angleWithUp <= MIN_ANGLE && deltaY > 0) {
-            deltaY = 0; // Останавливаем вращение при приближении к минимальному углу
-        } else if (angleWithUp >= MAX_ANGLE && deltaY < 0) {
-            deltaY = 0; // Останавливаем вращение при приближении к максимальному углу
-        }
-
-
-        // Плавное замедление вращения при приближении к пределам
-        if (angleWithUp <= MIN_ANGLE + SMOOTH_BOUNDARY && deltaY > 0) {
-            return deltaY * (angleWithUp - MIN_ANGLE) / SMOOTH_BOUNDARY;
-        }
-        if (angleWithUp >= MAX_ANGLE - SMOOTH_BOUNDARY && deltaY < 0) {
-            return deltaY * (MAX_ANGLE - angleWithUp) / SMOOTH_BOUNDARY;
-        }
-
-        return deltaY;
-    }
-
-    private Vector3f rotationAroundAxis(Vector3f axis, double delta, Vector3f vector) {
-        if (delta == 0) {
-            return vector;
-        }
-        Matrix4f rotation = Matrix4f.rotateAroundAxis(axis, (float) (-delta * 0.01));
-        return applyMatrixToVector(rotation, vector);
-    }
-
-    private Vector3f applyMatrixToVector(Matrix4f matrix, Vector3f vector) {
-        Vector4f vec4 = new Vector4f(vector.getX(), vector.y(), vector.getZ(), 1.0);
-        vec4 = (Vector4f) matrix.multiplyingMatrixByVector(vec4);
-        return new Vector3f(vec4.getX(), vec4.y(), vec4.getZ());
-    }
-
-    // Методы для увеличения и уменьшения зума
-    public void zoom(double scaleFactor) {
-        Vector3f direction = position.subtract(target).getNormalized();
-        direction.multiplyByScalar(-scaleFactor);
-        Vector3f newPosition = position.add(direction);
-
-        // Проверка, что камера не приблизилась слишком близко
-        double distanceToTarget = newPosition.subtract(target).getLength();
-        if (distanceToTarget >= MIN_DISTANCE) {
-            position = newPosition;  // Обновление позиции только если расстояние допустимо
-        }
-    }
-
-    public void zoomIn() {
-        zoom(5);
-    }
-
-    public void zoomOut() {
-        zoom(-5);
     }
 
 }
