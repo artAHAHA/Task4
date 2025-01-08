@@ -41,18 +41,8 @@ public class GuiController {
     public static boolean isLight = true;
     private boolean isStructure = true;
     private BufferedImage image = null;
-    final private float TRANSLATION = 3F;
+    final private float TRANSLATION = 0.5F;
 
-    @FXML
-    private TextField scaleX, scaleY, scaleZ;
-
-    @FXML
-    private TextField rotateX, rotateY, rotateZ;
-
-    @FXML
-    private TextField translateX, translateY, translateZ;
-    @FXML
-    private VBox controlPanel;
     @FXML
     AnchorPane anchorPane;
 
@@ -72,21 +62,6 @@ public class GuiController {
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
         DrawUtilsJ graphicsUtils = new DrawUtilsJ(canvas);
 
-        controlPanel.toFront();
-
-        scaleX.setText("1");
-        scaleY.setText("1");
-        scaleZ.setText("1");
-
-        rotateX.setText("0");
-        rotateY.setText("0");
-        rotateZ.setText("0");
-
-        translateX.setText("0");
-        translateY.setText("0");
-        translateZ.setText("0");
-
-
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
@@ -99,7 +74,7 @@ public class GuiController {
 
             if (mesh != null) {
                 try {
-                    MyColor  mc = new MyColor(0.5, 0.5, 0.5);
+                    MyColor  mc = new MyColor(1, 0, 1);
                     RenderRasterization.render(canvas.getGraphicsContext2D(), graphicsUtils,
                                 camera, mesh, (int) width, (int) height, image, mc);
                     if (isStructure) {
@@ -134,7 +109,7 @@ public class GuiController {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
             mesh.saveInitialState();
-            CalculateNormals.findNormals(mesh);
+            CalculateNormals.findNormals(mesh); // вычисление нормалей после загрузки модели
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -145,32 +120,56 @@ public class GuiController {
 
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+        camera.scalePosition(new Vector3f(0.98f, 0.98f, 0.98f));
     }
 
     @FXML
     public void handleCameraBackward(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+        camera.scalePosition(new Vector3f(1.05f, 1.05f, 1.05f));
     }
 
     @FXML
     public void handleCameraLeft(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.moveTarget(new Vector3f(TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraRight(ActionEvent actionEvent) {
-        camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+        camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+        camera.moveTarget(new Vector3f(-TRANSLATION, 0, 0));
     }
 
     @FXML
     public void handleCameraUp(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+        camera.moveTarget(new Vector3f(0, TRANSLATION, 0));
     }
 
     @FXML
     public void handleCameraDown(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+        camera.moveTarget(new Vector3f(0, -TRANSLATION, 0));
+    }
+
+    @FXML
+    public void handleCameraLeftAroundTarget(ActionEvent actionEvent) {
+        camera.rotationAroundChangedY(Math.PI / 30);
+    }
+
+    @FXML
+    public void handleCameraRightAroundTarget(ActionEvent actionEvent) {
+        camera.rotationAroundChangedY(-Math.PI / 30);
+    }
+
+    @FXML
+    public void handleCameraAroundX(ActionEvent actionEvent) {
+        camera.rotationAroundChangedX(Math.PI / 20);
+    }
+
+    @FXML
+    public void handleCameraAroundXBack(ActionEvent actionEvent) {
+        camera.rotationAroundChangedX(-Math.PI / 20);
     }
 }
 
