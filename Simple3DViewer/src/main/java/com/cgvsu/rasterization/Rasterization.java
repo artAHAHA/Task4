@@ -49,8 +49,10 @@ public class Rasterization {
         }
 
         double cosLight;
-        if (GuiController.isLight) cosLight = MathRasterization.getCosLight(camera, p1, p2, p3);
-        else cosLight = 1;
+        if (GuiController.isLight) {
+            cosLight = MathRasterization.getCosLight(camera, p1, p2, p3);
+        } else cosLight = 1;
+
         final double x1 = points.get(0).getX();
         final double x2 = points.get(1).getX();
         final double x3 = points.get(2).getX();

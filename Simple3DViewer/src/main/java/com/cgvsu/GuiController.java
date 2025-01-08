@@ -36,6 +36,8 @@ import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.render_engine.Camera;
 
+import javax.imageio.ImageIO;
+
 public class GuiController {
 
     public static boolean isLight = true;
@@ -118,6 +120,23 @@ public class GuiController {
         mesh.setPolygons(triangles); // заменяем в модели полигоны на треугольные
     }
 
+    @FXML
+    private void loadTexture() throws IOException {
+
+        if (!mesh.isTexture) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
+            fileChooser.setTitle("Load png");
+            File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+
+            if (file == null) {
+                return;
+            }
+            image = ImageIO.read(file);
+        }
+        mesh.isTexture = !mesh.isTexture;
+
+    }
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
         camera.scalePosition(new Vector3f(0.98f, 0.98f, 0.98f));
