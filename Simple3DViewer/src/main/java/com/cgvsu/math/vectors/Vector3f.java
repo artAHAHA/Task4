@@ -1,6 +1,6 @@
 package com.cgvsu.math.vectors;
 
-public class Vector3f extends AbstractVector<Vector3f> {
+public class Vector3f extends AbstractVector<Vector3f> implements Cloneable{
 
     public Vector3f(double... components) {
         super(components);
@@ -39,5 +39,24 @@ public class Vector3f extends AbstractVector<Vector3f> {
     @Override
     public Vector3f createInstance(double... components) {
         return new Vector3f(components);
+    }
+
+    @Override
+    public Vector3f clone()  {
+        try {
+            return (Vector3f) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

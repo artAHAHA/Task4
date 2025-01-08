@@ -22,4 +22,14 @@ public class Vector4f extends AbstractVector<Vector4f> {
     public Vector4f createInstance(double... components) {
         return new Vector4f(components);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

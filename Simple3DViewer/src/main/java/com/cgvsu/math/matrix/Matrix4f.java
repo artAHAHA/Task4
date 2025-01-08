@@ -182,4 +182,14 @@ public class Matrix4f extends AbstractMatrix<Matrix4f> {
     public static double[] flatten4x4(double[][] matrix) {
         return flatten(matrix, 4);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

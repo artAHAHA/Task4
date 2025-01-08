@@ -1,44 +1,82 @@
 package com.cgvsu.model;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Polygon {
 
-    private ArrayList<Integer> vertexIndices;
-    private ArrayList<Integer> textureVertexIndices;
-    private ArrayList<Integer> normalIndices;
+    private List<Integer> vertexIndices;
+    private List<Integer> textureVertexIndices;
+    private List<Integer> normalIndices;
 
 
     public Polygon() {
-        vertexIndices = new ArrayList<Integer>();
-        textureVertexIndices = new ArrayList<Integer>();
-        normalIndices = new ArrayList<Integer>();
+        vertexIndices = new ArrayList<>();
+        textureVertexIndices = new ArrayList<>();
+        normalIndices = new ArrayList<>();
     }
 
-    public void setVertexIndices(ArrayList<Integer> vertexIndices) {
+    public Polygon(final List<Integer> vertexIndices, final List<Integer> textureVertexIndices, final List<Integer> normalIndices) {
+        this.vertexIndices = vertexIndices;
+        this.textureVertexIndices = textureVertexIndices;
+        this.normalIndices = normalIndices;
+    }
+
+    // Метод clone
+    @Override
+    public Polygon clone() {
+        try {
+            Polygon clonedPolygon = (Polygon) super.clone();
+
+            // Глубокое копирование списков
+            clonedPolygon.vertexIndices = new ArrayList<>(this.vertexIndices);
+            clonedPolygon.textureVertexIndices = new ArrayList<>(this.textureVertexIndices);
+            clonedPolygon.normalIndices = new ArrayList<>(this.normalIndices);
+
+            return clonedPolygon;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Этот код никогда не должен выполняться
+        }
+    }
+
+    public void setVertexIndices(List<Integer> vertexIndices) {
         assert vertexIndices.size() >= 3;
         this.vertexIndices = vertexIndices;
     }
 
-    public void setTextureVertexIndices(ArrayList<Integer> textureVertexIndices) {
+    public void setTextureVertexIndices(List<Integer> textureVertexIndices) {
         assert textureVertexIndices.size() >= 3;
         this.textureVertexIndices = textureVertexIndices;
     }
 
-    public void setNormalIndices(ArrayList<Integer> normalIndices) {
+    public void setNormalIndices(List<Integer> normalIndices) {
         assert normalIndices.size() >= 3;
         this.normalIndices = normalIndices;
     }
 
-    public ArrayList<Integer> getVertexIndices() {
+    public List<Integer> getVertexIndices() {
         return vertexIndices;
     }
 
-    public ArrayList<Integer> getTextureVertexIndices() {
+    public List<Integer> getTextureVertexIndices() {
         return textureVertexIndices;
     }
 
-    public ArrayList<Integer> getNormalIndices() {
+    public List<Integer> getNormalIndices() {
         return normalIndices;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Polygon polygon = (Polygon) o;
+        return Objects.equals(vertexIndices, polygon.vertexIndices) && Objects.equals(textureVertexIndices, polygon.textureVertexIndices) && Objects.equals(normalIndices, polygon.normalIndices);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vertexIndices, textureVertexIndices, normalIndices);
     }
 }

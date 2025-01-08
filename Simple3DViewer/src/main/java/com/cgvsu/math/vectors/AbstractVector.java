@@ -1,6 +1,7 @@
 package com.cgvsu.math.vectors;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public abstract class AbstractVector<T extends AbstractVector<T>> {
     protected final double[] components;
@@ -135,6 +136,21 @@ public abstract class AbstractVector<T extends AbstractVector<T>> {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractVector<?> that = (AbstractVector<?>) o;
+        return Double.compare(x, that.x) == 0 && Double.compare(y, that.y) == 0 && Double.compare(z, that.z) == 0 && Double.compare(w, that.w) == 0 && Arrays.equals(components, that.components);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(x, y, z, w);
+        result = 31 * result + Arrays.hashCode(components);
+        return result;
     }
 
     /**

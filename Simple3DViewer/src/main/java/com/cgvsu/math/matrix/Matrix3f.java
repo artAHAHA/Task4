@@ -40,4 +40,14 @@ public class Matrix3f extends AbstractMatrix<Matrix3f> {
     public static double[] flatten3x3(double[][] matrix) {
         return flatten(matrix, 3);  // Передаем размер 3 для 3x3 матрицы
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -1,6 +1,7 @@
 package com.cgvsu;
 
 import com.cgvsu.math.matrix.Matrix4f;
+import com.cgvsu.objreader.ObjReaderException;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.math.vectors.Vector3f;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -18,17 +20,19 @@ import javafx.util.Duration;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
+import com.cgvsu.vertexDelete.Eraser;
+
 
 public class GuiController {
 
@@ -42,6 +46,10 @@ public class GuiController {
 
     @FXML
     private TextField translateX, translateY, translateZ;
+    @FXML
+    private TextField countOfVertex;
+    @FXML
+    private TextField countOfPolygons;
     @FXML
     private VBox controlPanel;
     @FXML
@@ -133,6 +141,9 @@ public class GuiController {
             mesh.saveInitialState();
         } catch (IOException exception) {
             exception.printStackTrace();
+        } catch (ObjReaderException.ObjContentException exception) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Вы выбрали некорректный файл с моделью, попробуйте еще раз)");
+            alert.showAndWait();
         }
     }
 
@@ -186,6 +197,21 @@ public class GuiController {
             showError("Invalid input for transformations.");
         }
     }
+
+    private Model deleteVertices(List<Integer> verticesToDelete, boolean newFile) {
+        return Eraser.vertexDelete(mesh, verticesToDelete, true, false, false, newFile);
+    }
+
+    @FXML
+    private void deleteVertex(ActionEvent actionEvent) {
+        int count = Integer.parseInt(countOfVertex.getText());
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            list.add(i);
+        }
+            mesh = deleteVertices(list, true);
+    }
+
 
     // Применение трансформации
     private void applyTransformation(Matrix4f transformation) {

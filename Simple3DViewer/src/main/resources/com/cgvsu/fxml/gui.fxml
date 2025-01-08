@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.cgvsu.GuiController">
     <MenuBar>
@@ -20,7 +21,11 @@
                     <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                 </accelerator>
             </MenuItem>
-         <MenuItem mnemonicParsing="false" onAction="#onSaveModelMenuItemClick" text="Save Model" />
+         <MenuItem mnemonicParsing="false" onAction="#onSaveModelMenuItemClick" text="Save Model">
+            <accelerator>
+               <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+            </accelerator>
+         </MenuItem>
         </Menu>
         <Menu mnemonicParsing="false" text="Camera Options">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
@@ -57,34 +62,123 @@
     </MenuBar>
 
 
-    <VBox fx:id="controlPanel" alignment="TOP_CENTER" spacing="10" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-        <HBox spacing="5">
-            <Label text="Scale:" />
+    <VBox fx:id="controlPanel" alignment="TOP_CENTER" prefHeight="294.0" prefWidth="522.0" spacing="10" AnchorPane.bottomAnchor="528.0" AnchorPane.rightAnchor="0.0">
+      <Label prefHeight="41.0" prefWidth="102.0" text="Menu">
+         <font>
+            <Font name="Algerian" size="36.0" />
+         </font>
+      </Label>
+      <HBox prefHeight="11.0" prefWidth="516.0">
+         <children>
+            <HBox prefHeight="26.0" prefWidth="88.0" />
+            <Label text="width">
+               <font>
+                  <Font name="Algerian" size="13.0" />
+               </font>
+            </Label>
+            <HBox layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="122.0" />
+            <Label layoutX="10.0" layoutY="10.0" text="height">
+               <font>
+                  <Font name="Algerian" size="13.0" />
+               </font>
+            </Label>
+            <HBox layoutX="130.0" layoutY="10.0" prefHeight="26.0" prefWidth="122.0" />
+            <Label layoutX="38.0" layoutY="10.0" text="length">
+               <font>
+                  <Font name="Algerian" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+        <HBox prefHeight="29.0" prefWidth="522.0" spacing="5">
+            <Label prefHeight="26.0" prefWidth="44.0" text="Scale:">
+            <font>
+               <Font name="Algerian" size="12.0" />
+            </font></Label>
             <TextField fx:id="scaleX" promptText="1" />
             <TextField fx:id="scaleY" promptText="1" />
             <TextField fx:id="scaleZ" promptText="1" />
         </HBox>
         <HBox spacing="5">
-            <Label text="Rotate X:" />
+            <Label prefHeight="28.0" prefWidth="61.0" text="Rotate X:">
+            <font>
+               <Font name="Algerian" size="12.0" />
+            </font></Label>
             <TextField fx:id="rotateX" promptText="0" />
         </HBox>
         <HBox spacing="5">
-            <Label text="Rotate Y:" />
+            <Label prefHeight="30.0" prefWidth="60.0" text="Rotate Y:">
+            <font>
+               <Font name="Algerian" size="12.0" />
+            </font></Label>
             <TextField fx:id="rotateY" promptText="0" />
         </HBox>
         <HBox spacing="5">
-            <Label text="Rotate Z:" />
+            <Label prefHeight="29.0" prefWidth="60.0" text="Rotate Z:">
+            <font>
+               <Font name="Algerian" size="12.0" />
+            </font></Label>
             <TextField fx:id="rotateZ" promptText="0" />
         </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <HBox prefHeight="18.0" prefWidth="238.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="239.0" text="Ox" textAlignment="CENTER">
+                     <font>
+                        <Font name="Algerian" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="10.0" prefHeight="18.0" prefWidth="95.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="130.0" text="Oy">
+                     <font>
+                        <Font name="Algerian" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox layoutX="210.0" layoutY="10.0" prefHeight="18.0" prefWidth="192.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="203.0" text="Scope" textAlignment="CENTER">
+                     <font>
+                        <Font name="Algerian" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
         <HBox spacing="5">
-            <Label text="Translate:" />
+            <Label prefHeight="14.0" prefWidth="90.0" text="Translate:">
+            <font>
+               <Font name="Algerian" size="12.0" />
+            </font></Label>
             <TextField fx:id="translateX" promptText="0" />
             <TextField fx:id="translateY" promptText="0" />
             <TextField fx:id="translateZ" promptText="0" />
         </HBox>
         <!-- Добавляем кнопку для применения всех трансформаций -->
         <Button onAction="#handleApplyTransformation" text="Apply Transformation" />
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="28.0" prefWidth="130.0" text="Count of vertex">
+               <font>
+                  <Font name="Algerian" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="countOfVertex" promptText="0" />
+            <HBox prefHeight="26.0" prefWidth="25.0" />
+            <Button mnemonicParsing="false" onAction="#deleteVertex" text="Delete Vertex">
+               <font>
+                  <Font name="Algerian" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
     </VBox>
 
-    <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
+                   <Canvas fx:id="canvas" height="892.0" layoutY="8.0" width="1600" AnchorPane.topAnchor="30.0" />
 </AnchorPane>

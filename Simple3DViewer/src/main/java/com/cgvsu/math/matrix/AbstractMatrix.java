@@ -2,6 +2,8 @@ package com.cgvsu.math.matrix;
 
 import com.cgvsu.math.vectors.AbstractVector;
 
+import java.util.Arrays;
+
 
 public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
 
@@ -221,4 +223,16 @@ public abstract class AbstractMatrix<T extends AbstractMatrix<T>> {
         return flat;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractMatrix<?> that = (AbstractMatrix<?>) o;
+        return Arrays.equals(elements, that.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(elements);
+    }
 }
