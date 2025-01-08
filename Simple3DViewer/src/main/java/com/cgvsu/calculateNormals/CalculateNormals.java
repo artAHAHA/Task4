@@ -7,7 +7,7 @@ import com.cgvsu.model.Polygon;
 import java.util.*;
 
 public class CalculateNormals {
-    /*public static void findNormals(Model m) { // находим нормали для каждого полигона
+    public static void findNormals(Model m) { // находим нормали для каждого полигона
         List<Polygon> polygons = m.polygons;
         List<Vector3f> vertices = m.vertices;
         m.normals.clear();
@@ -83,5 +83,5 @@ public class CalculateNormals {
 
     public static Vector3f vectorProduct(Vector3f a, Vector3f b) { // вычисляем веторное проиведение
         return new Vector3f(a.getY() * b.getZ() - b.getY() * a.getZ(), -a.getX() * b.getZ() + b.getX() * a.getZ(), a.getX() * b.getY() - b.getX() * a.getY());
-    }*/
+    }
 }

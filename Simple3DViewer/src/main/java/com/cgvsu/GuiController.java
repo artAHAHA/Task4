@@ -66,9 +66,6 @@ public class GuiController {
 
     private Timeline timeline;
 
-    private double prevMouseX, prevMouseY; // Для отслеживания начальных координат мыши
-    private boolean isMousePressed = false; // Флаг для отслеживания нажатия мыши
-
     @FXML
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
@@ -117,20 +114,7 @@ public class GuiController {
         timeline.getKeyFrames().add(frame);
         timeline.play();
 
-        // Обработка нажатия и отпускания кнопки мыши
-        canvas.setOnMousePressed(this::onMousePressed);
-        canvas.setOnMouseReleased(this::onMouseReleased);
-        //canvas.setOnMouseDragged(this::onMouseDragged);
-        //canvas.setOnScroll(this::onMouseScroll);
-
         canvas.setFocusTraversable(true);
-    }
-
-    // Событие для нажатия мыши
-    private void onMousePressed(MouseEvent event) {
-        prevMouseX = event.getSceneX();
-        prevMouseY = event.getSceneY();
-        isMousePressed = true; // Устанавливаем флаг нажатия
     }
 
     @FXML
@@ -149,58 +133,15 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
-            //mesh.saveInitialState();
-            //CalculateNormals.findNormals(mesh);
+            mesh.saveInitialState();
+            CalculateNormals.findNormals(mesh);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
-        ArrayList<Polygon> triangles = Triangle.triangulatePolygon(mesh.polygons); //создаём список для хранения треугольных полигонов
+        ArrayList<Polygon> triangles = Triangle.triangulateModel(mesh.polygons); //создаём список для хранения треугольных полигонов
         mesh.setPolygons(triangles); // заменяем в модели полигоны на треугольные
     }
-
-    /*@FXML
-    private void handleApplyTransformation(ActionEvent actionEvent) {
-        try {
-            double sx = Double.parseDouble(scaleX.getText());
-            double sy = Double.parseDouble(scaleY.getText());
-            double sz = Double.parseDouble(scaleZ.getText());
-            double angleX = Double.parseDouble(rotateX.getText());
-            double angleY = Double.parseDouble(rotateY.getText());
-            double angleZ = Double.parseDouble(rotateZ.getText());
-            double tx = Double.parseDouble(translateX.getText());
-            double ty = Double.parseDouble(translateY.getText());
-            double tz = Double.parseDouble(translateZ.getText());
-
-            // Применяем все трансформации
-            Matrix4f transformation = Matrix4f.translate(tx, ty, tz)
-                    .multiply(Matrix4f.rotateX(angleX))
-                    .multiply(Matrix4f.rotateY(angleY))
-                    .multiply(Matrix4f.rotateZ(angleZ))
-                    .multiply(Matrix4f.scale(sx, sy, sz));
-
-            applyTransformation(transformation);
-
-        } catch (NumberFormatException e) {
-            showError("Invalid input for transformations.");
-        }
-    }
-
-    // Применение трансформации
-    private void applyTransformation(Matrix4f transformation) {
-        if (mesh != null) {
-            mesh.applyTransformationRelativeToInitial(transformation);
-            canvas.requestFocus(); // Запрос фокуса для холста после изменения
-        } else {
-            showError("No model loaded.");
-        }
-    }*/
-
-    // Метод для отображения ошибок
-    private void showError(String message) {
-        System.err.println(message); // Здесь можно заменить на графическое отображение ошибок
-    }
-
 
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
@@ -231,35 +172,6 @@ public class GuiController {
     public void handleCameraDown(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
     }
-
-    // Событие для отпускания кнопки мыши
-    private void onMouseReleased(MouseEvent event) {
-        isMousePressed = false; // Сбрасываем флаг нажатия
-    }
-
-    // Событие для перетаскивания мыши (вращение камеры или перемещение камеры)
-    /*private void onMouseDragged(MouseEvent event) {
-        if (isMousePressed) {
-            double deltaX = event.getSceneX() - prevMouseX;
-            double deltaY = event.getSceneY() - prevMouseY;
-
-            // Вращение камеры на основе движения мыши
-            camera.rotate(deltaX, deltaY);
-
-            prevMouseX = event.getSceneX();
-            prevMouseY = event.getSceneY();
-        }
-    }
-
-    // Событие для прокрутки колесика мыши (изменение зума)
-    private void onMouseScroll(ScrollEvent event) {
-        if (event.getDeltaY() > 0) {
-            camera.zoomIn();
-        } else {
-            camera.zoomOut();
-        }
-    }*/
-
 }
 
 

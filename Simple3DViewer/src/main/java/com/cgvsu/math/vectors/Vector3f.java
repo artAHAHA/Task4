@@ -5,10 +5,8 @@ import com.cgvsu.math.exception.MathExceptions;
 import javax.swing.plaf.SplitPaneUI;
 
 public class Vector3f extends AbstractVector implements Vector {
-
     public Vector3f() {
     }
-
     public Vector3f(Vector3f v){
         super.values = v.values;
         super.size = values.length;
@@ -102,5 +100,9 @@ public class Vector3f extends AbstractVector implements Vector {
     @Override
     protected boolean checkLengthInputValues(float[] values) {
         return values.length == 3;
+    }
+
+    public static Vector3f subtraction(Vector3f v1, Vector3f v2) {
+        return new Vector3f(v1.getX() - v2.getX(), v1.getY() - v2.getY(), v1.getZ() - v2.getZ());
     }
 }
