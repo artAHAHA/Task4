@@ -87,7 +87,7 @@ public class GuiController {
 
             if (mesh != null) {
                 try {
-                    MyColor  mc = new MyColor(1, 0, 1);
+                    MyColor  mc = new MyColor(0.5,0, 1);
                     RenderRasterization.render(canvas.getGraphicsContext2D(), graphicsUtils,
                                 camera.get(numberCamera), mesh, (int) width, (int) height, image, mc);
                     if (isStructure) {
@@ -136,8 +136,7 @@ public class GuiController {
 
         if (!mesh.isTexture) {
             FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.png", "*.jpg");
-            fileChooser.getExtensionFilters().add(extFilter);
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
             fileChooser.setTitle("Load png");
             File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
 

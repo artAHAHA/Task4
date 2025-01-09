@@ -7,13 +7,6 @@ public class Vector4f extends AbstractVector implements Vector {
     public Vector4f() {
     }
 
-    public Vector4f(float[] values) {
-        if (checkLengthInputValues(values)) {
-            super.values = values;
-            super.size = values.length;
-        } else throw new MathExceptions();
-    }
-
     public Vector4f(float v1, float v2, float v3, float v4) {
         super.values = new float[4];
 

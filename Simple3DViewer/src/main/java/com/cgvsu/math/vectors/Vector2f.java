@@ -3,14 +3,6 @@ package com.cgvsu.math.vectors;
 import com.cgvsu.math.exception.MathExceptions;
 
 public class Vector2f extends AbstractVector implements Vector {
-
-    public Vector2f(float[] values) {
-        if (checkLengthInputValues(values)) {
-            super.values = values;
-            super.size = values.length;
-        } else throw new MathExceptions();
-    }
-
     public Vector2f(float v1, float v2) {
         super.values = new float[2];
 
@@ -18,9 +10,6 @@ public class Vector2f extends AbstractVector implements Vector {
 
         super.values[0] = v1;
         super.values[1] = v2;
-    }
-
-    public Vector2f() {
     }
 
     @Override
