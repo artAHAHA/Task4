@@ -40,8 +40,8 @@ import javax.imageio.ImageIO;
 
 public class GuiController {
 
-    public static boolean isLight = true;
-    private boolean isStructure = true;
+    public static boolean isLight = false;
+    private boolean isStructure = false;
     private BufferedImage image = null;
     final private float TRANSLATION = 0.5F;
 
@@ -125,7 +125,8 @@ public class GuiController {
 
         if (!mesh.isTexture) {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("*.png", "*.jpg");
+            fileChooser.getExtensionFilters().add(extFilter);
             fileChooser.setTitle("Load png");
             File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
 
@@ -136,6 +137,15 @@ public class GuiController {
         }
         mesh.isTexture = !mesh.isTexture;
 
+    }
+    @FXML
+    private void loadLight() {
+        isLight = !isLight;
+    }
+
+    @FXML
+    private void loadStructure() {
+        isStructure = !isStructure;
     }
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
