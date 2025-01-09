@@ -14,6 +14,8 @@
 <?import javafx.scene.control.Label?>
 
 <?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.text.Font?>
 <AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.cgvsu.GuiController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
@@ -97,6 +99,28 @@
                 </accelerator>
             </CheckMenuItem>
         </Menu>
+        <Menu mnemonicParsing="false" text="Camera">
+            <MenuItem mnemonicParsing="false" onAction="#addCamera" text="Добавить камеру">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#deleteCamera" text="Удалить камеру">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
+        </Menu>
     </MenuBar>
+
     <Canvas fx:id="canvas" width="1600" height="870" AnchorPane.topAnchor="30.0"/>
+
+    <Label layoutX="705.0" layoutY="1.0" prefHeight="23.0" prefWidth="115.0" text="Камера" textFill="#000000" textOverrun="CLIP" wrapText="true">
+        <font>
+            <Font name="Impact" size="17.0" />
+        </font>
+    </Label>
+    <ComboBox fx:id="chooseCamera" layoutX="670.0" layoutY="28.0" onAction="#choosingCamera" prefHeight="18.0" prefWidth="128.0" styleClass="combo-box" />
+    <Label layoutX="39.0" layoutY="54.0" />
+    <Label layoutX="92.0" layoutY="77.0" />
 </AnchorPane>
