@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
     <MenuBar>
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load Model">
@@ -62,7 +62,7 @@
     </MenuBar>
 
 
-    <VBox fx:id="controlPanel" alignment="TOP_CENTER" prefHeight="294.0" prefWidth="522.0" spacing="10" AnchorPane.bottomAnchor="528.0" AnchorPane.rightAnchor="0.0">
+    <VBox fx:id="controlPanel" alignment="TOP_CENTER" prefHeight="463.0" prefWidth="522.0" spacing="10" AnchorPane.bottomAnchor="323.0" AnchorPane.rightAnchor="0.0">
       <Label prefHeight="41.0" prefWidth="102.0" text="Menu">
          <font>
             <Font name="Algerian" size="36.0" />
@@ -120,9 +120,9 @@
             </font></Label>
             <TextField fx:id="rotateZ" promptText="0" />
         </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="19.0" prefWidth="522.0">
          <children>
-            <HBox prefHeight="18.0" prefWidth="238.0">
+            <HBox prefHeight="22.0" prefWidth="237.0">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="239.0" text="Ox" textAlignment="CENTER">
                      <font>
@@ -131,7 +131,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox layoutX="10.0" layoutY="10.0" prefHeight="18.0" prefWidth="95.0">
+            <HBox layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="94.0">
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="130.0" text="Oy">
                      <font>
@@ -161,7 +161,11 @@
             <TextField fx:id="translateZ" promptText="0" />
         </HBox>
         <!-- Добавляем кнопку для применения всех трансформаций -->
-        <Button onAction="#handleApplyTransformation" text="Apply Transformation" />
+        <Button onAction="#handleApplyTransformation" text="Apply Transformation">
+         <font>
+            <Font name="Algerian" size="12.0" />
+         </font></Button>
+      <HBox prefHeight="37.0" prefWidth="522.0" />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label alignment="CENTER" prefHeight="28.0" prefWidth="130.0" text="Count of vertex">
@@ -180,5 +184,5 @@
       </HBox>
     </VBox>
 
-                   <Canvas fx:id="canvas" height="892.0" layoutY="8.0" width="1600" AnchorPane.topAnchor="30.0" />
+    <Canvas fx:id="canvas" height="892.0" layoutX="1.0" layoutY="26.0" width="1600" AnchorPane.topAnchor="26.0" />
 </AnchorPane>

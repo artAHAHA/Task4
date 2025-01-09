@@ -9,8 +9,10 @@ import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
@@ -49,12 +52,9 @@ public class GuiController {
     @FXML
     private TextField countOfVertex;
     @FXML
-    private TextField countOfPolygons;
-    @FXML
     private VBox controlPanel;
     @FXML
     AnchorPane anchorPane;
-
     @FXML
     private Canvas canvas;
     private Model mesh = null;
@@ -211,7 +211,6 @@ public class GuiController {
         }
             mesh = deleteVertices(list, true);
     }
-
 
     // Применение трансформации
     private void applyTransformation(Matrix4f transformation) {
